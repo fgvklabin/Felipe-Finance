@@ -41,6 +41,8 @@ export const NAV: NavGroup[] = [
     key: "group.invest",
     items: [
       { key: "nav.invest", href: "/invest", icon: "LineChart" },
+      { key: "nav.portfolio", href: "/invest/carteira", icon: "Briefcase", requiresAuth: true },
+      { key: "nav.simulator", href: "/invest/simulador", icon: "FlaskRound" },
       { key: "nav.companies", href: "/invest/empresas", icon: "Factory" },
       { key: "nav.funds", href: "/invest/fundos", icon: "Landmark" },
       { key: "nav.etfs", href: "/invest/etfs", icon: "Layers" },

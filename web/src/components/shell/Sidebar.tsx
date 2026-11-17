@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Bell, Building2, CalendarDays, CandlestickChart, Circle, Coins, Database, Factory, Flame, FlaskConical, Hexagon, Landmark,
+  Bell, Briefcase, Building2, CalendarDays, CandlestickChart, Circle, Coins, Database, Factory, Flame, FlaskConical, FlaskRound, Hexagon, Landmark,
   LayoutDashboard, Layers, LineChart, Lock, Network, Newspaper, Pickaxe, Scale, Settings, ShieldCheck, Sparkles, Spline, Star,
   Trees, TrendingUp, Truck, Wheat, type LucideIcon,
 } from "lucide-react";
 
 // Mapa explícito (evita empacotar a biblioteca inteira de ícones no cliente)
 const ICONS: Record<string, LucideIcon> = {
-  Bell, Building2, CalendarDays, CandlestickChart, Coins, Database, Factory, Flame, FlaskConical, Hexagon, Landmark,
+  Bell, Briefcase, Building2, CalendarDays, CandlestickChart, Coins, Database, Factory, Flame, FlaskConical, FlaskRound, Hexagon, Landmark,
   LayoutDashboard, Layers, LineChart, Network, Newspaper, Pickaxe, Scale, Settings, Sparkles, Spline, Star, Trees, TrendingUp, Wheat,
 };
 import { NAV } from "@/lib/nav";

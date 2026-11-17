@@ -20,7 +20,7 @@ const MaterialSchema = z.object({
   usd_share: num(100).default(0), essential: z.boolean().default(true),
 });
 
-export const QuoteSchema = z.object({
+const QuoteSchema = z.object({
   supplier_name: z.string().trim().min(1).max(200), supplier_id: z.string().uuid().nullable().optional(), commodity_id: slug.nullable().optional(),
   product: z.string().trim().min(1).max(200), specification: z.string().max(1000).nullable().optional(), quality: z.string().max(300).nullable().optional(),
   unit: z.string().trim().min(1).max(20), quantity: z.coerce.number().positive().max(1e12), unit_price: z.coerce.number().positive().max(1e12),

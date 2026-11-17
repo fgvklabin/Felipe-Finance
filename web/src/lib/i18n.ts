@@ -17,6 +17,8 @@ const dict = {
   "nav.business": { pt: "Avermont Business", en: "Avermont Business" },
   "nav.suppliers": { pt: "Comparador de Fornecedores", en: "Supplier Comparison" },
   "nav.invest": { pt: "Avermont Invest", en: "Avermont Invest" },
+  "nav.portfolio": { pt: "Minha Carteira", en: "My Portfolio" },
+  "nav.simulator": { pt: "Simulador de Cenários", en: "Scenario Simulator" },
   "nav.companies": { pt: "Empresas e Ações", en: "Companies & Stocks" },
   "nav.funds": { pt: "Fundos de Investimento", en: "Investment Funds" },
   "nav.etfs": { pt: "ETFs", en: "ETFs" },
