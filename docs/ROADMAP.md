@@ -12,7 +12,8 @@ Landing page, navegação completa, painel de mercados, categorias, páginas de 
 - [x] Resumo diário e notas de mercado geradas a partir dos dados
 - [x] Extração de cotações por IA, com verificação humana obrigatória
 - [x] Edição mais recente do Pink Sheet (descoberta automática da URL)
-- [ ] ITR trimestral, releases e EBITDA ajustado
+- [x] ITR trimestral (resultados por trimestre nas páginas das empresas)
+- [ ] Releases de resultados e EBITDA ajustado
 - [x] Carteiras de fundos (CDA) para exposição verificada
 - [ ] Feeds de notícias autorizados
 - [ ] Conab, IBGE, Comex Stat, USDA PSD/WASDE, ANP, EIA

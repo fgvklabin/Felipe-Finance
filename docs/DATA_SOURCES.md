@@ -11,7 +11,7 @@ O registro completo, com licença, cobertura, limitações e status de ingestão
 | `bcb_sgs_*` | `api.bcb.gov.br/dados/serie/bcdata.sgs.{código}` | Dados públicos | Diária/mensal | 432 Selic, 433 IPCA, 13522 IPCA 12m, 24364 IBC-Br |
 | `bcb_focus` | `olinda.bcb.gov.br/.../Expectativas` | Dados públicos | Semanal | A API exige espaços como `%20` |
 | `ecb_exr` | `data-api.ecb.europa.eu/service/data/EXR` | Reutilização com citação | Diária | Taxas cruzadas e réplica do índice do dólar (não é o DXY® da ICE) |
-| `cvm_companies` | `dados.cvm.gov.br` (cad, FCA, DFP) | Dados abertos | Anual | Tickers conferidos no FCA. **CSNA3 não consta no FCA** (o registro traz "4030") e por isso fica sinalizado |
+| `cvm_companies` | `dados.cvm.gov.br` (cad, FCA, DFP, ITR) | Dados abertos | Trimestral/anual | ITR: trimestre isolado da DRE; último trimestre do exercício = anual (DFP) − 9 meses; D&A por diferença de acumulados; funciona para exercícios que não terminam em dezembro (ex.: usinas, abril–março). Tickers conferidos no FCA. **CSNA3 não consta no FCA** (o registro traz "4030") e por isso fica sinalizado |
 | `cvm_funds` | `dados.cvm.gov.br` (registro_fundo_classe, inf_diario, lâmina) | Dados abertos | Diária/mensal | 13 meses de informes diários (~11 MB por mês). Linhas malformadas da lâmina são descartadas |
 | `cvm_cda` | `dados.cvm.gov.br/dados/FI/DOC/CDA` (cda_fi_AAAAMM.zip) | Dados abertos | Mensal | Carteira de cada fundo: peso = valor de mercado ÷ PL; look-through de um nível em cotas de fundos; futuros só com direção; parcela confidencial informada. Usa o mês mais recente em que a parcela confidencial é ≤ 50% |
 

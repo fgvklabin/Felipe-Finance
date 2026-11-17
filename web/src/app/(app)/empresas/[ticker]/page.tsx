@@ -6,12 +6,13 @@ import { CompanyScenario } from "@/components/invest/CompanyScenario";
 import { FinancialsChart } from "@/components/invest/FinancialsChart";
 import { WatchButton, AlertLink } from "@/components/WatchButton";
 import { AskAi } from "@/components/ai/AskAi";
-import { findCompany, getCompanies, getSummaryItem } from "@/lib/market";
+import { findCompany, getCompanies, getSeries, getSummaryItem, type CompanyQuarter } from "@/lib/market";
+import { quarterAverage, quarterLabel, quarterStory } from "@/lib/quarters";
 import { kbFor } from "@/lib/companies-kb";
 import { linksForTicker } from "@/lib/impact";
 import { getCurrentUser } from "@/lib/auth";
 import { isWatched } from "@/lib/watchlist";
-import { fmtCompact, fmtDate, fmtNumber, fmtPct } from "@/lib/format";
+import { fmtCompact, fmtDate, fmtNumber, fmtPct, fmtPrice } from "@/lib/format";
 
 export async function generateMetadata({ params }: { params: Promise<{ ticker: string }> }) {
   const { ticker } = await params;
@@ -37,6 +38,18 @@ export default async function CompanyPage({ params }: { params: Promise<{ ticker
     ["Resultado financeiro", "financialResult"], ["Lucro líquido", "netIncome"], ["Caixa + aplicações", "cash"], ["Dívida bruta", "grossDebt"], ["Dívida líquida", "netDebt"], ["Patrimônio líquido", "equity"], ["Ativo total", "totalAssets"],
     ["Margem bruta", "grossProfitMargin", true], ["Margem EBIT", "ebitMargin", true], ["Margem EBITDA calc.", "ebitdaCalculatedMargin", true], ["Margem líquida", "netIncomeMargin", true],
   ];
+  const quarters = c.quarters ?? [];
+  // Commodity principal com preço real, para comparar com a receita de cada trimestre
+  const mainId = kb?.commodityExposure.find((e) => e.direction === "receita" && getSummaryItem(e.commodity)?.dataMode === "real")?.commodity;
+  const mainSeries = mainId ? getSeries(mainId) : null;
+  const mainName = mainId ? getSummaryItem(mainId)?.name.pt ?? mainId : null;
+  const avgPrice = (end: string) => (mainSeries ? quarterAverage(mainSeries.points, end, mainSeries.frequency) : null);
+  const priceYoY = (q: CompanyQuarter) => {
+    const now = avgPrice(q.end), before = avgPrice(`${Number(q.end.slice(0, 4)) - 1}${q.end.slice(4)}`);
+    return now !== null && before ? now / before - 1 : null;
+  };
+  const lastQ = quarters.at(-1);
+  const story = lastQ ? quarterStory(lastQ, mainName ? { name: mainName.charAt(0).toLowerCase() + mainName.slice(1), change: priceYoY(lastQ) } : null) : [];
   const commodityOptions = (kb?.commodityExposure ?? []).map((e) => ({ id: e.commodity, label: getSummaryItem(e.commodity)?.name.pt ?? e.commodity }));
   return (
     <div className="space-y-5">
@@ -69,10 +82,50 @@ export default async function CompanyPage({ params }: { params: Promise<{ ticker
         <Card className="p-3"><Stat label="Patrimônio líquido" value={fmtCompact(last?.equity)} /></Card>
       </div>
 
+      {lastQ && (
+        <Card>
+          <CardHeader title="Resultados por trimestre" subtitle={`CVM — Informações Trimestrais (ITR) · último: ${quarterLabel(lastQ.period)}`} accent="var(--brand)" />
+          <CardBody className="space-y-3">
+            <ul className="space-y-1 text-[14.5px] leading-relaxed">{story.map((s) => <li key={s} className="flex gap-2"><span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />{s}</li>)}</ul>
+            <FinancialsChart data={quarters.map((q) => ({ label: quarterLabel(q.period), revenue: q.revenue, ebitda: q.ebitdaCalculated ?? 0, net: q.netIncome ?? 0 }))} height={220} />
+            <div className="overflow-x-auto">
+              <table className="fin-table w-full min-w-[640px] whitespace-nowrap text-[12.5px]">
+                <thead>
+                  <tr>
+                    <th className="text-left">Trimestre</th><th className="text-right">Receita</th><th className="text-right">vs. 1 ano antes</th><th className="text-right">EBITDA calc. (margem)</th><th className="text-right">Lucro líquido</th><th className="text-right">Dívida líquida</th>
+                    {mainName && <th className="text-right">{mainName}: preço médio (vs. 1 ano)</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...quarters].reverse().map((q) => {
+                    const p = avgPrice(q.end), py = priceYoY(q);
+                    return (
+                      <tr key={q.period}>
+                        <td className="font-medium">{quarterLabel(q.period)}{q.source !== "ITR" && <span className="ml-1 text-[10.5px] text-muted" title="Último trimestre do exercício: anual (DFP) menos 9 meses (ITR)">calc.</span>}</td>
+                        <td className="num text-right">{fmtCompact(q.revenue)}</td>
+                        <td className="text-right"><Change v={q.revenueYoY ?? null} /></td>
+                        <td className="num text-right">{fmtCompact(q.ebitdaCalculated ?? null)} <span className="text-[11px] text-muted">{fmtPct(q.ebitdaCalculatedMargin ?? null, 0, false)}</span></td>
+                        <td className={`num text-right ${q.netIncome !== undefined && q.netIncome < 0 ? "text-down" : ""}`}>{fmtCompact(q.netIncome ?? null)}</td>
+                        <td className="num text-right">{fmtCompact(q.netDebt ?? null)}</td>
+                        {mainName && <td className="num text-right">{p !== null ? fmtPrice(p) : "—"} {py !== null && <Change v={py} />}</td>}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[11px] text-muted">
+              Fonte: CVM — ITR (consolidado), versão mais recente; o último trimestre de cada exercício (&quot;calc.&quot;) é o anual (DFP) menos 9 meses. EBITDA calculado = EBIT + D&amp;A da DFC, não é o EBITDA ajustado da companhia.
+              {mainName && ` Preço médio de ${mainName} no trimestre: World Bank Pink Sheet (${getSummaryItem(mainId!)?.unitLabel ?? mainSeries?.unit ?? ""}). Receita e preço andarem juntos não prova causa: volumes, câmbio e contratos também pesam.`}
+            </p>
+          </CardBody>
+        </Card>
+      )}
+
       <div className="grid gap-5 xl:grid-cols-3">
-        <Card className="xl:col-span-2">
+        <Card className="min-w-0 xl:col-span-2">
           <CardHeader title="Demonstrações financeiras (consolidadas)" subtitle={`CVM DFP · referência FCA ${fmtDate(c.fcaReferenceDate)} · dados coletados em ${fmtDate(cvm.ingestedAt)}`} />
-          <FinancialsChart data={fin.map((f) => ({ year: f.fiscalYear, revenue: f.revenue ?? 0, ebitda: f.ebitdaCalculated ?? 0, net: f.netIncome ?? 0, margin: f.ebitdaCalculatedMargin ?? 0 }))} />
+          <FinancialsChart data={fin.map((f) => ({ label: f.fiscalYear, revenue: f.revenue ?? 0, ebitda: f.ebitdaCalculated ?? 0, net: f.netIncome ?? 0 }))} />
           <div className="overflow-x-auto">
             <table className="fin-table w-full min-w-[640px] text-[12.5px]">
               <thead><tr><th className="text-left">R$</th>{fin.map((f) => <th key={f.fiscalYear} className="text-right">{f.fiscalYear}</th>)}</tr></thead>

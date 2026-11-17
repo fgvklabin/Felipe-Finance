@@ -78,7 +78,7 @@ cd worker && python -m pytest -q
 | USD/BRL, EUR/BRL | **Real**, diário | BCB PTAX |
 | CNY/BRL, AUD/USD, USD/CAD, USD/NOK, réplica do índice do dólar | **Real (derivado)**, diário | Taxas de referência do BCE |
 | Selic, IPCA, IBC-Br, Focus | **Real** | BCB SGS e Olinda |
-| 13 companhias: cadastro, tickers, DFP 2022–2025 | **Real** | CVM (FCA, DFP) |
+| 13 companhias: cadastro, tickers, DFP 2022–2026 e resultados dos últimos 8 trimestres | **Real** | CVM (FCA, DFP, ITR) |
 | 240 fundos, ETFs e Fiagros: cadastro, cotas diárias, lâminas | **Real**; exposição inferida do nome/classe | CVM |
 | Polímeros, químicos industriais, celulose, papéis, aço, etanol, diesel, cana | **Demonstração** (índice base 100) | Exigem licença (ICIS, Fastmarkets, Argus, S&P, FOEX, CEPEA) ou integração ANP |
 | Fornecedores "Demonstrativo Alfa/Beta/Gama" | **Demonstração** (fictícios, sem contato) | — |

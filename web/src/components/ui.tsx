@@ -8,7 +8,7 @@ export function cn(...a: (string | false | null | undefined)[]) {
 
 export function Card({ children, className, id }: { children: ReactNode; className?: string; id?: string }) {
   return (
-    <section id={id} className={cn("panel animate-fade-up", className)}>
+    <section id={id} className={cn("panel min-w-0 animate-fade-up", className)}>
       {children}
     </section>
   );

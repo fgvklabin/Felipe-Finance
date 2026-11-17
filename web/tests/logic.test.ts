@@ -11,7 +11,7 @@ import { fmtPct, fmtPrice } from "../src/lib/format";
 const view = (price: number, d1: number | null = 0.02, date = "2026-11-16"): MarketView => ({
   price: () => ({ value: price, date, d1, m1: 0.05, frequency: "daily", name: "USD/BRL" }),
   forecastDirection: () => ({ direction: "up", status: "ok", central: 5.9 }),
-  latestFiscalYear: () => 2025,
+  latestPeriod: () => "2026T3",
   fundExposure: () => "direta_indice",
   latestNoteDate: () => ({ date: "2026-11-16", title: "Nota" }),
 });

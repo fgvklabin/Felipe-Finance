@@ -2,10 +2,10 @@
 
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-export function FinancialsChart({ data }: { data: { year: number; revenue: number; ebitda: number; net: number; margin: number }[] }) {
-  const rows = data.map((d) => ({ year: String(d.year), revenue: +(d.revenue / 1e9).toFixed(2), ebitda: +(d.ebitda / 1e9).toFixed(2), net: +(d.net / 1e9).toFixed(2) }));
+export function FinancialsChart({ data, height = 240 }: { data: { label: string | number; revenue: number; ebitda: number; net: number }[]; height?: number }) {
+  const rows = data.map((d) => ({ year: String(d.label), revenue: +(d.revenue / 1e9).toFixed(2), ebitda: +(d.ebitda / 1e9).toFixed(2), net: +(d.net / 1e9).toFixed(2) }));
   return (
-    <div className="h-[240px] px-2 pt-3">
+    <div className="px-2 pt-3" style={{ height }}>
       <ResponsiveContainer>
         <BarChart data={rows} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
           <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />

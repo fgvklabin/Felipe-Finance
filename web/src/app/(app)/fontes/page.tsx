@@ -68,7 +68,7 @@ export default function SourcesPage() {
                   ))}
                   <div className="col-span-2"><dt className="text-[10.5px] uppercase tracking-wide text-muted">Limitações conhecidas</dt><dd className="text-fg-2">{s.limitations}</dd></div>
                   {runs.length > 0 && <div className="col-span-2"><dt className="text-[10.5px] uppercase tracking-wide text-muted">Última atualização bem-sucedida</dt><dd className="num text-fg-2">{runs.map((r) => fmtDateTime(r.lastSuccess)).join(" · ")}</dd></div>}
-                  {s.url && <div className="col-span-2"><a href={s.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue underline">{s.url}</a></div>}
+                  {s.url && <div className="col-span-2"><a href={s.url} target="_blank" rel="noopener noreferrer" className="break-all text-xs text-blue underline">{s.url}</a></div>}
                 </dl>
               </CardBody>
             </Card>

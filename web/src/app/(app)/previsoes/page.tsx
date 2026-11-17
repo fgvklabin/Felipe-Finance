@@ -82,7 +82,7 @@ export default function ForecastsPage() {
       <div className="grid gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader title="Avaliação fora da amostra — horizontes com ganho significativo" />
-          <CardBody className="p-0">
+          <CardBody className="overflow-x-auto p-0">
             <table className="fin-table w-full text-[13px]">
               <thead><tr><th className="text-left">Série / horizonte</th><th className="text-left">Modelo</th><th className="text-right">Ganho (MAE)</th><th className="text-right">p (DM)</th><th className="text-right">Acerto direcional</th><th className="text-right">Status</th></tr></thead>
               <tbody>
@@ -104,14 +104,16 @@ export default function ForecastsPage() {
         <Card>
           <CardHeader title={<span className="flex items-center gap-2"><ShieldCheck size={15} className="text-brand" /> Histórico imutável de previsões</span>} subtitle="Cada execução é arquivada com hash SHA-256 (append-only) para avaliação futura com dados realizados" />
           <CardBody className="p-0">
+            <div className="overflow-x-auto">
             <table className="fin-table w-full text-[12px]">
               <thead><tr><th className="text-left">Execução</th><th className="text-right">Séries</th><th className="text-left">SHA-256</th></tr></thead>
               <tbody>
                 {archive.map((a) => (
-                  <tr key={a.sha256}><td className="num">{fmtDateTime(a.generatedAt)}</td><td className="num text-right">{a.series}</td><td className="font-mono text-[10.5px] text-muted">{a.sha256.slice(0, 32)}…</td></tr>
+                  <tr key={a.sha256}><td className="num">{fmtDateTime(a.generatedAt)}</td><td className="num text-right">{a.series}</td><td className="break-all font-mono text-[10.5px] text-muted" title={a.sha256}>{a.sha256.slice(0, 16)}…</td></tr>
                 ))}
               </tbody>
             </table>
+            </div>
             <p className="px-3 py-2 text-[11px] text-muted">A avaliação “ao vivo” (previsões passadas × preços realizados) acumula conforme novas edições das fontes são ingeridas. No banco de dados, previsões e preços históricos são protegidos por gatilhos que bloqueiam alterações.</p>
           </CardBody>
         </Card>

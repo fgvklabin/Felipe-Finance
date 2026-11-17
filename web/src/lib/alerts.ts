@@ -7,7 +7,7 @@ export interface AlertRow { id: string; alert_type: AlertType; item_type: string
 export interface MarketView {
   price(ref: string): { value: number; date: string; d1: number | null; m1: number | null; frequency: string; name: string } | null;
   forecastDirection(ref: string): { direction: string; status: string; central: number | null } | null;
-  latestFiscalYear(ticker: string): number | null;
+  latestPeriod(ticker: string): string | null; // "2026T3" (trimestre) ou "2025" (ano)
   fundExposure(cnpj: string): string | null;
   latestNoteDate(ref: string): { date: string; title: string } | null;
 }
@@ -56,10 +56,12 @@ export function evaluateAlert(a: AlertRow, m: MarketView): AlertResult {
       return { triggered: fired, value: f.central, state: { key }, title: "A previsão mudou", body: `A previsão de 30 dias passou de “${prev.key ?? "—"}” para “${key}”.` };
     }
     case "company_results": {
-      const y = m.latestFiscalYear(a.item_ref);
-      if (y === null) return { ...none(prev), unavailable: "sem dados" };
-      const fired = typeof prev.year === "number" && y > prev.year;
-      return { triggered: fired, value: y, state: { year: y }, title: `${a.item_ref}: novas demonstrações financeiras`, body: `Demonstrações de ${y} disponíveis (CVM).` };
+      const p = m.latestPeriod(a.item_ref);
+      if (p === null) return { ...none(prev), unavailable: "sem dados" };
+      // estado antigo guardava só o ano: apenas atualiza, sem disparar
+      const fired = typeof prev.period === "string" && p > prev.period;
+      const label = p.includes("T") ? `${p.slice(-1)}º trimestre de ${p.slice(0, 4)}` : p;
+      return { triggered: fired, value: null, state: { period: p }, title: `${a.item_ref}: novo resultado divulgado`, body: `Resultado do ${label} disponível (CVM).` };
     }
     case "fund_exposure": {
       const e = m.fundExposure(a.item_ref);

@@ -98,6 +98,12 @@ export interface CvmCompany {
   securities: { code: string; security: string; segment: string; composition: string | null }[];
   name: string | null; cvmCode: string | null; registrationStatus: string; issuerStatus: string | null; sector: string | null;
   activityDescription: string | null; control: string | null; website: string | null; fcaReferenceDate: string | null; financials: CompanyYear[];
+  quarters?: CompanyQuarter[];
+}
+export interface CompanyQuarter {
+  period: string; end: string; source: string; revenue: number; ebit?: number; netIncome?: number; depreciationAmortization?: number;
+  ebitdaCalculated?: number; netDebt?: number; ebitMargin?: number; netIncomeMargin?: number; ebitdaCalculatedMargin?: number;
+  revenueYoY?: number; netIncomePrevYear?: number;
 }
 
 export interface Fund {
@@ -152,7 +158,7 @@ export const getSummary = () => readJson<{ generatedAt: string | null; items: Su
 export const getForecasts = () => readJson<{ generatedAt: string | null; engineVersion?: string; forecasts: Record<string, ForecastResult> }>("market/forecasts.json", { generatedAt: null, forecasts: {} });
 export const getMacro = () => readJson<Macro>("market/macro.json", { indicators: {}, focus: null });
 export const getIngestionLog = () => readJson<{ runs: Record<string, IngestionRun> }>("market/ingestion_log.json", { runs: {} });
-export const getCompanies = () => readJson<{ fcaYear?: number; dfpFilesLoaded?: number[]; ingestedAt?: string; companies: CvmCompany[] }>("market/companies.json", { companies: [] });
+export const getCompanies = () => readJson<{ fcaYear?: number; dfpFilesLoaded?: number[]; itrFilesLoaded?: number[]; ingestedAt?: string; companies: CvmCompany[] }>("market/companies.json", { companies: [] });
 export const getFunds = () => readJson<{ ingestedAt?: string; funds: Fund[] }>("market/funds.json", { funds: [] });
 export const getCorrelations = () => readJson<Correlations | null>("market/correlations.json", null);
 export const getForecastArchive = () => readJson<{ entries: { file: string; sha256: string; generatedAt: string; series: number }[] }>("market/forecast_archive/index.json", { entries: [] });

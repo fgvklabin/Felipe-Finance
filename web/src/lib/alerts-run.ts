@@ -17,9 +17,11 @@ export function marketView(): MarketView {
       const h = getForecasts().forecasts[ref]?.horizons["30d"];
       return h ? { direction: h.direction ?? "n/a", status: h.status, central: h.central ?? null } : null;
     },
-    latestFiscalYear(t) {
+    latestPeriod(t) {
       const c = getCompanies().companies.find((x) => x.tickersGiven.includes(t));
-      return c?.financials.at(-1)?.fiscalYear ?? null;
+      const q = c?.quarters?.at(-1)?.period;
+      const y = c?.financials.at(-1)?.fiscalYear;
+      return q ?? (y ? String(y) : null);
     },
     fundExposure(cnpj) {
       const f = findFund(cnpj);

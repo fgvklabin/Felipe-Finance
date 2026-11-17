@@ -14,6 +14,7 @@ from datetime import date
 
 from ..config import CVM_BASE
 from ..net import download
+from . import cvm_itr
 
 log = logging.getLogger("avermont.cvm_companies")
 
@@ -85,7 +86,8 @@ def fetch() -> dict:
     # DFP: arquivo do ano X traz exercícios X (ÚLTIMO) e X-1 (PENÚLTIMO)
     fin: dict[str, dict[str, dict]] = {c: {} for c in cnpjs}
     dfp_years_loaded = []
-    for y in (year - 1, year - 3):
+    # ano corrente: exercícios encerrados em março/junho (ex.: usinas com ano-safra) já entregues
+    for y in (year, year - 1, year - 3):
         try:
             zf = zipfile.ZipFile(download(f"{CVM_BASE}/CIA_ABERTA/DOC/DFP/DADOS/dfp_cia_aberta_{y}.zip", max_age_hours=72))
         except Exception as exc:  # noqa: BLE001
@@ -151,4 +153,12 @@ def fetch() -> dict:
             "fcaReferenceDate": g["Data_Referencia"] if g else None,
             "financials": years,
         })
-    return {"fcaYear": fca_year, "dfpFilesLoaded": dfp_years_loaded, "companies": companies}
+    # Resultados trimestrais (ITR); o último trimestre do exercício vem de DFP − 9 meses
+    try:
+        quarters, itr_loaded = cvm_itr.fetch(cnpjs, {c["cnpj"]: c["financials"] for c in companies})
+    except Exception as exc:  # noqa: BLE001
+        log.warning("ITR indisponível: %s", exc)
+        quarters, itr_loaded = {}, []
+    for c in companies:
+        c["quarters"] = quarters.get(c["cnpj"], [])
+    return {"fcaYear": fca_year, "dfpFilesLoaded": dfp_years_loaded, "itrFilesLoaded": itr_loaded, "companies": companies}

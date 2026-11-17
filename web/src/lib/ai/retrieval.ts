@@ -5,6 +5,7 @@ import { COMPANY_KB } from "../companies-kb";
 import { SOURCES } from "../sources-registry";
 import { stocksFor, fundsFor } from "../beneficiaries";
 import { BASIS_LABEL, exposureText, monthLabel } from "../fund-exposure";
+import { quarterLabel } from "../quarters";
 import { fmtCompact, fmtDate, fmtNumber, fmtPct, fmtPrice } from "../format";
 import { query } from "../db";
 import { rankQuotes } from "../procurement";
@@ -81,10 +82,11 @@ export function publicDocs(): Doc[] {
   for (const co of getCompanies().companies) {
     const kb = COMPANY_KB.find((k) => k.tickers.some((t) => co.tickersGiven.includes(t)));
     const fin = co.financials.map((f) => `${f.fiscalYear}: receita ${fmtCompact(f.revenue)}, EBITDA calc. ${fmtCompact(f.ebitdaCalculated)} (margem ${fmtPct(f.ebitdaCalculatedMargin ?? null, 1, false)}), lucro ${fmtCompact(f.netIncome)}, dívida líquida ${fmtCompact(f.netDebt)}`).join("; ");
+    const qs = (co.quarters ?? []).map((q) => `${quarterLabel(q.period)}: receita ${fmtCompact(q.revenue)}${q.revenueYoY !== undefined ? ` (${fmtPct(q.revenueYoY)} vs. 1 ano antes)` : ""}, EBITDA calc. ${fmtCompact(q.ebitdaCalculated ?? null)}, lucro ${fmtCompact(q.netIncome ?? null)}, dívida líquida ${fmtCompact(q.netDebt ?? null)}${q.source !== "ITR" ? " (anual menos 9 meses)" : ""}`).join("; ");
     docs.push({
       id: `company:${co.tickersGiven[0]}`, title: `${co.tickersGiven.join("/")} — ${co.name}`, scope: "public", keys: [...co.tickersGiven.map(norm), ...tokens(co.name ?? ""), ...(kb ? tokens(kb.shortName) : [])],
-      url: `/empresas/${co.tickersGiven[0]}`, asOf: co.financials.at(-1)?.fiscalYearEnd ?? null, source: "CVM — FCA e DFP (consolidado)",
-      body: `${co.name} (${co.sector}). Atividade (FCA): ${co.activityDescription}. Demonstrações (DFP/CVM): ${fin}. ${kb ? `Produtos: ${kb.products.join(", ")}. Exposição a commodities: ${kb.commodityExposure.map((e) => `${e.commodity} (${e.direction}: ${e.note})`).join("; ")}. Câmbio: ${kb.currency} Fatores que podem compensar: ${kb.offsets.join("; ")}.` : ""} Cotação da ação não disponível (exige licença B3).`,
+      url: `/empresas/${co.tickersGiven[0]}`, asOf: co.quarters?.at(-1)?.end ?? co.financials.at(-1)?.fiscalYearEnd ?? null, source: "CVM — FCA, DFP e ITR (consolidado)",
+      body: `${co.name} (${co.sector}). Atividade (FCA): ${co.activityDescription}. Demonstrações anuais (DFP/CVM): ${fin}.${qs ? ` Resultados trimestrais (ITR/CVM): ${qs}.` : ""} ${kb ? `Produtos: ${kb.products.join(", ")}. Exposição a commodities: ${kb.commodityExposure.map((e) => `${e.commodity} (${e.direction}: ${e.note})`).join("; ")}. Câmbio: ${kb.currency} Fatores que podem compensar: ${kb.offsets.join("; ")}.` : ""} Cotação da ação não disponível (exige licença B3).`,
     });
   }
   for (const l of IMPACT_LINKS) {

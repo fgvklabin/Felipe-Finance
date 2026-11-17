@@ -47,7 +47,7 @@ export function Simulator({ assets, history, vol, funds }: { assets: SimAsset[];
 
   return (
     <div className="grid gap-5 p-4 xl:grid-cols-[420px_1fr]">
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-4">
         <div>
           <div className="mb-1 text-sm font-semibold">1. Carteira educacional</div>
           <div className="space-y-1">
@@ -99,7 +99,7 @@ export function Simulator({ assets, history, vol, funds }: { assets: SimAsset[];
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-4">
         <div className="grid gap-3 md:grid-cols-3">
           <div className="rounded-lg border border-line p-3"><div className="text-[11px] uppercase tracking-wide text-muted">Efeito direto estimado</div><div className={cn("num text-2xl font-semibold", res.directTotal >= 0 ? "text-up" : "text-down")}>{fmtPct(res.directTotal, 2)}</div><div className="text-xs text-muted">sobre {fmtPct(res.quantifiedWeight, 0, false)} da carteira com exposição verificável</div></div>
           <div className="rounded-lg border border-line p-3"><div className="text-[11px] uppercase tracking-wide text-muted">Incerteza residual (±1σ, {horizon}m)</div><div className="num text-2xl font-semibold">±{fmtPct(res.sigma, 1, false)}</div><div className="text-xs text-muted">volatilidade histórica dos ativos diretos; ignora correlações</div></div>
