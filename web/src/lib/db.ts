@@ -129,9 +129,23 @@ export function getDb(): Promise<Db> {
   return g.__avermontDb;
 }
 
+/** Converte Date em string ISO (datas puras → AAAA-MM-DD) para serialização segura até o cliente. */
+function normalize<T>(rows: T[]): T[] {
+  for (const r of rows as Record<string, unknown>[]) {
+    for (const k in r) {
+      const v = r[k];
+      if (v instanceof Date) {
+        const iso = v.toISOString();
+        r[k] = iso.endsWith("T00:00:00.000Z") ? iso.slice(0, 10) : iso;
+      }
+    }
+  }
+  return rows;
+}
+
 export async function query<T = Row>(sql: string, params?: unknown[]): Promise<T[]> {
   const db = await getDb();
-  return (await db.query<T>(sql, params)).rows;
+  return normalize((await db.query<T>(sql, params)).rows);
 }
 
 export async function one<T = Row>(sql: string, params?: unknown[]): Promise<T | null> {

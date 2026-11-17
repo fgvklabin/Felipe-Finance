@@ -1,5 +1,5 @@
 import "server-only";
-import { fmtDate, fmtPct, fmtPrice } from "./format";
+import { fmtDate, fmtNumber, fmtPct, fmtPrice } from "./format";
 import { getCatalog, getForecasts, getMacro, getSummary, type SummaryItem } from "./market";
 import { IMPACT_LINKS } from "./impact";
 
@@ -47,7 +47,7 @@ export function dailySummary() {
         (focusFx ? ` A mediana do Focus para o fim de ${year} é R$ ${fmtPrice(focusFx.Mediana)}.` : ""),
     );
   }
-  if (macro.selic) bullets.push(`**Selic** (meta Copom) em ${fmtPrice(macro.selic.value)}% a.a.; **IPCA 12 meses** em ${macro.ipca12 ? fmtPrice(macro.ipca12.value) + "%" : "—"} (${macro.ipca12 ? fmtDate(macro.ipca12.date, "pt", { month: "short", year: "numeric", timeZone: "UTC" }) : ""}).`);
+  if (macro.selic) bullets.push(`**Selic** (meta Copom) em ${fmtNumber(macro.selic.value, 2)}% a.a.; **IPCA 12 meses** em ${macro.ipca12 ? fmtNumber(macro.ipca12.value, 2) + "%" : "—"} (${macro.ipca12 ? fmtDate(macro.ipca12.date, "pt", { month: "short", year: "numeric", timeZone: "UTC" }) : ""}).`);
   if (byY1.length >= 2) {
     const top = byY1.slice(0, 3).map((i) => `${i.name.pt} (${fmtPct(i.stats.changes.y1)})`).join(", ");
     const bottom = byY1.slice(-3).reverse().map((i) => `${i.name.pt} (${fmtPct(i.stats.changes.y1)})`).join(", ");
@@ -111,8 +111,8 @@ export function marketNotes(): MarketNote[] {
   if (macro.ipca12) {
     notes.push({
       id: "macro-ipca", date: macro.ipca12.date, category: "macro",
-      title: `IPCA acumulado em 12 meses: ${fmtPrice(macro.ipca12.value)}%`,
-      summary: `Dado oficial do IBGE via SGS/BCB. Variação mensal mais recente: ${macro.ipcaM ? fmtPrice(macro.ipcaM.value) + "%" : "—"}.`,
+      title: `IPCA acumulado em 12 meses: ${fmtNumber(macro.ipca12.value, 2)}%`,
+      summary: `Dado oficial do IBGE via SGS/BCB. Variação mensal mais recente: ${macro.ipcaM ? fmtNumber(macro.ipcaM.value, 2) + "%" : "—"}.`,
       relatedCommodities: ["milho", "soja", "acucar", "cafe-arabica"], relatedCompanies: [],
       whyItMatters: "Inflação persistente tende a manter juros altos por mais tempo, o que encarece capital de giro e estoques e pode fortalecer o real via diferencial de juros — afetando o preço em reais de commodities cotadas em dólar.",
       positives: ["Aplicações pós-fixadas (CDI)"], negatives: ["Empresas alavancadas", "Compras financiadas de insumos"],

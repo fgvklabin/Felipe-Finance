@@ -11,7 +11,7 @@ import { toRows } from "@/lib/rows";
 import { getPrefs } from "@/lib/prefs";
 import { dailySummary, latestMacro, marketNotes } from "@/lib/insights";
 import { upcomingEvents } from "@/lib/calendar";
-import { fmtDate, fmtDateTime, fmtPct, fmtPrice } from "@/lib/format";
+import { fmtDate, fmtDateTime, fmtNumber, fmtPct, fmtPrice } from "@/lib/format";
 
 export const metadata = { title: "Visão Geral" };
 
@@ -60,8 +60,8 @@ export default async function OverviewPage() {
             ) : <Stat label={label} value="—" />}
           </Card>
         ))}
-        <Card className="p-3"><Stat label="Selic (meta)" value={macro.selic ? `${fmtPrice(macro.selic.value)}%` : "—"} sub={macro.selic ? `BCB · ${fmtDate(macro.selic.date)}` : "indisponível"} /></Card>
-        <Card className="p-3"><Stat label="IPCA 12 meses" value={macro.ipca12 ? `${fmtPrice(macro.ipca12.value)}%` : "—"} sub={macro.ipca12 ? `IBGE · ${fmtDate(macro.ipca12.date, "pt", { month: "short", year: "numeric", timeZone: "UTC" })}` : "indisponível"} /></Card>
+        <Card className="p-3"><Stat label="Selic (meta)" value={macro.selic ? `${fmtNumber(macro.selic.value, 2)}%` : "—"} sub={macro.selic ? `BCB · ${fmtDate(macro.selic.date)}` : "indisponível"} /></Card>
+        <Card className="p-3"><Stat label="IPCA 12 meses" value={macro.ipca12 ? `${fmtNumber(macro.ipca12.value, 2)}%` : "—"} sub={macro.ipca12 ? `IBGE · ${fmtDate(macro.ipca12.date, "pt", { month: "short", year: "numeric", timeZone: "UTC" })}` : "indisponível"} /></Card>
         <Card className="p-3">
           {brent ? (
             <Link href={brent.href}>
@@ -97,7 +97,7 @@ export default async function OverviewPage() {
                     <td className="text-fg-2">{ind === "PIB Total" ? "PIB (%)" : ind === "Câmbio" ? "Câmbio (R$/US$)" : `${ind} (%)`}</td>
                     {["2026", "2027", "2028"].map((y) => {
                       const it = macro.focus?.items.find((i) => i.Indicador === ind && i.DataReferencia === y);
-                      return <td key={y} className="num text-right">{it ? fmtPrice(it.Mediana) : "—"}</td>;
+                      return <td key={y} className="num text-right">{it ? fmtNumber(it.Mediana, 2) : "—"}</td>;
                     })}
                   </tr>
                 ))}
