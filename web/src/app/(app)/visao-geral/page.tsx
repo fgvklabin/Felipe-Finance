@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CalendarDays, Newspaper, Sparkles, TrendingUp } from "lucide-react";
-import { Card, CardBody, CardHeader, Disclaimer, Notice, PageHeader, Stat } from "@/components/ui";
+import { Card, CardBody, CardHeader, Disclaimer, PageHeader, Stat } from "@/components/ui";
 import { Change, ChangePill, DataBadge } from "@/components/market/bits";
 import { Heatmap } from "@/components/market/Heatmap";
 import { MarketTable } from "@/components/market/MarketTable";
@@ -40,8 +40,8 @@ export default async function OverviewPage() {
     <div className="space-y-5">
       <PageHeader
         eyebrow="Avermont Markets"
-        title="Visão Geral do Mercado"
-        subtitle="Commodities, câmbio e indicadores econômicos com fonte, data e status de cada dado. Séries mensais do Banco Mundial e câmbio diário do BCB/BCE."
+        title="Visão geral"
+        subtitle="O que está acontecendo com commodities, dólar e economia — em poucos minutos."
         right={<span className="text-xs text-muted">Snapshot gerado em {fmtDateTime(getSummary().generatedAt)}</span>}
       />
       <TickerTape rows={tickerRows} />
@@ -74,8 +74,8 @@ export default async function OverviewPage() {
       <div className="grid gap-5 xl:grid-cols-3">
         <Card className="xl:col-span-2">
           <CardHeader
-            title={<span className="flex items-center gap-2"><Sparkles size={15} className="text-purple" /> Resumo diário de mercado</span>}
-            subtitle="Gerado automaticamente a partir dos dados da plataforma (sem LLM). Pergunte detalhes à Avermont AI."
+            title={<span className="flex items-center gap-2"><Sparkles size={15} className="text-purple" /> Hoje em 1 minuto</span>}
+            subtitle="Resumo automático dos dados oficiais"
             accent="var(--purple)"
           />
           <CardBody>
@@ -87,7 +87,7 @@ export default async function OverviewPage() {
           </CardBody>
         </Card>
         <Card>
-          <CardHeader title="Expectativas de mercado (Focus)" subtitle={macro.focus ? `Mediana · pesquisa de ${fmtDate(macro.focus.date)} · BCB` : "indisponível"} accent="var(--cyan)" />
+          <CardHeader title="O que o mercado espera" subtitle={macro.focus ? `Pesquisa Focus do Banco Central · ${fmtDate(macro.focus.date)}` : "indisponível"} accent="var(--cyan)" />
           <CardBody className="p-0">
             <table className="fin-table w-full text-[13px]">
               <thead><tr><th className="text-left">Indicador</th>{["2026", "2027", "2028"].map((y) => <th key={y} className="text-right">{y}</th>)}</tr></thead>
@@ -103,23 +103,23 @@ export default async function OverviewPage() {
                 ))}
               </tbody>
             </table>
-            <p className="px-3 py-2 text-[11px] text-muted">Expectativas de mercado não são previsões da Avermont nem cotações de contratos futuros.</p>
+            <p className="px-3 py-2 text-[11px] text-muted">Mediana das projeções de economistas.</p>
           </CardBody>
         </Card>
       </div>
 
       <Card>
-        <CardHeader title="Mapa de calor das commodities" subtitle="Cores por variação no período; categorias com cores próprias. Clique para abrir o painel do ativo." accent="var(--blue)" />
+        <CardHeader title="Quem subiu e quem caiu" subtitle="Verde subiu, vermelho caiu. Clique para ver detalhes." accent="var(--blue)" />
         <CardBody><Heatmap rows={commodityRows} /></CardBody>
       </Card>
 
       <div className="grid gap-5 lg:grid-cols-3">
         {[
-          { title: "Maiores altas (12 meses)", list: ranked.slice(0, 6) },
-          { title: "Maiores quedas (12 meses)", list: ranked.slice(-6).reverse() },
+          { title: "Mais subiram em 12 meses", list: ranked.slice(0, 6) },
+          { title: "Mais caíram em 12 meses", list: ranked.slice(-6).reverse() },
         ].map(({ title, list }) => (
           <Card key={title}>
-            <CardHeader title={title} subtitle="Somente dados reais · preço internacional mensal" />
+            <CardHeader title={title} />
             <ul className="divide-y divide-line">
               {list.map((r) => (
                 <li key={r.id}>
@@ -135,7 +135,7 @@ export default async function OverviewPage() {
           </Card>
         ))}
         <Card>
-          <CardHeader title="Volatilidade" subtitle="Anualizada · diária (63 pregões) para câmbio, mensal (24 meses) para commodities" />
+          <CardHeader title="Os mais instáveis" subtitle="Quanto o preço costuma oscilar em um ano" />
           <ul className="divide-y divide-line">
             {volRank.map((r) => (
               <li key={r.id} className="flex items-center gap-2 px-4 py-2 text-sm">
@@ -152,13 +152,13 @@ export default async function OverviewPage() {
       </div>
 
       <Card>
-        <CardHeader title="Commodities e câmbio" subtitle="Tabela ordenável e filtrável. Variações diárias só existem para séries diárias; séries mensais mostram a variação contra o mês anterior." right={<Link href="/mercados" className="text-xs text-blue hover:underline">Ver todos os mercados →</Link>} />
+        <CardHeader title="Todos os preços" subtitle="Clique no nome para ver o painel completo" right={<Link href="/mercados" className="text-xs text-blue hover:underline">Ver mercados →</Link>} />
         <MarketTable rows={rows} compact />
       </Card>
 
       <div className="grid gap-5 lg:grid-cols-3">
         <Card>
-          <CardHeader title={<span className="flex items-center gap-2"><TrendingUp size={15} className="text-brand" /> Previsões cambiais (30 dias)</span>} subtitle="Avermont Forecast Engine · intervalo de 80%" right={<Link href="/previsoes" className="text-xs text-blue hover:underline">Forecast Engine →</Link>} />
+          <CardHeader title={<span className="flex items-center gap-2"><TrendingUp size={15} className="text-brand" /> Dólar e euro no próximo mês</span>} subtitle="Faixa provável segundo os modelos" right={<Link href="/previsoes" className="text-xs text-blue hover:underline">Previsões →</Link>} />
           <CardBody className="space-y-3">
             {fxForecasts.length === 0 && <p className="text-sm text-muted">Dados insuficientes para uma previsão confiável.</p>}
             {fxForecasts.map(({ id, f }) => (
@@ -168,14 +168,14 @@ export default async function OverviewPage() {
                   <span className="text-[11px] text-muted">alvo {fmtDate(f!.targetDate)}</span>
                 </div>
                 <div className="num mt-1 text-lg font-semibold">{fmtPrice(f!.central)}</div>
-                <div className="num text-xs text-muted">faixa {fmtPrice(f!.low)} – {fmtPrice(f!.high)} · {f!.modelLabel}</div>
-                {!f!.beatsBaseline && <div className="mt-1 text-[11px] text-gold">Nenhum modelo superou o passeio aleatório: estimativa central = último valor.</div>}
+                <div className="num text-xs text-muted">provavelmente entre {fmtPrice(f!.low)} e {fmtPrice(f!.high)}</div>
+                {!f!.beatsBaseline && <div className="mt-1 text-[11px] text-muted">Sem tendência clara: a melhor estimativa é o valor atual.</div>}
               </div>
             ))}
           </CardBody>
         </Card>
         <Card>
-          <CardHeader title={<span className="flex items-center gap-2"><Newspaper size={15} className="text-blue" /> Notas de mercado</span>} subtitle="Eventos detectados nos dados + “Por que isso importa?”" right={<Link href="/noticias" className="text-xs text-blue hover:underline">Ver todas →</Link>} />
+          <CardHeader title={<span className="flex items-center gap-2"><Newspaper size={15} className="text-blue" /> Destaques</span>} subtitle="E por que isso importa" right={<Link href="/noticias" className="text-xs text-blue hover:underline">Ver todos →</Link>} />
           <ul className="divide-y divide-line">
             {notes.map((n) => (
               <li key={n.id} className="px-4 py-2.5">
@@ -186,7 +186,7 @@ export default async function OverviewPage() {
           </ul>
         </Card>
         <Card>
-          <CardHeader title={<span className="flex items-center gap-2"><CalendarDays size={15} className="text-gold" /> Próximos eventos</span>} subtitle="Publicações recorrentes das fontes integradas" right={<Link href="/calendario" className="text-xs text-blue hover:underline">Calendário →</Link>} />
+          <CardHeader title={<span className="flex items-center gap-2"><CalendarDays size={15} className="text-gold" /> Agenda</span>} right={<Link href="/calendario" className="text-xs text-blue hover:underline">Calendário →</Link>} />
           <ul className="divide-y divide-line">
             {events.map((e) => (
               <li key={e.id} className="flex items-start gap-3 px-4 py-2.5 text-sm">
@@ -198,10 +198,7 @@ export default async function OverviewPage() {
         </Card>
       </div>
 
-      <Notice tone="blue" title="Transparência de dados">
-        Preços de commodities vêm do World Bank Pink Sheet (CC BY 4.0, mensal); câmbio da PTAX/BCB e das taxas de referência do BCE; indicadores do SGS/BCB e Focus.
-        Polímeros, químicos industriais, celulose, aço, etanol e diesel exigem provedores licenciados e aparecem apenas como índices de <b>demonstração</b>. Veja a <Link href="/fontes" className="underline">central de fontes</Link>.
-      </Notice>
+      <p className="text-xs text-muted">Dados oficiais: Banco Mundial, Banco Central do Brasil, Banco Central Europeu e CVM. Itens marcados como DEMO são apenas demonstração. <Link href="/fontes" className="underline">Ver fontes</Link>.</p>
       <Disclaimer />
     </div>
   );

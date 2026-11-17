@@ -39,5 +39,5 @@ export const POST = handler("onboarding", async (req) => {
     await query("UPDATE suppliers SET commodities = $1 WHERE owner_user_id = $2", [b.supplies.filter((x) => valid.has(x)), u.id]);
   }
   await query("UPDATE users SET onboarding = onboarding || $1::jsonb WHERE id = $2", [JSON.stringify({ completedAt: new Date().toISOString() }), u.id]);
-  return json({ ok: true, next: u.account_type === "business" ? "/business" : u.account_type === "supplier" ? "/fornecedor" : "/invest" });
+  return json({ ok: true, next: u.account_type === "business" ? "/business" : u.account_type === "supplier" ? "/fornecedor" : "/carteira" });
 });

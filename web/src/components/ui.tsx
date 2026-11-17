@@ -126,8 +126,32 @@ export function Empty({ title, children }: { title: ReactNode; children?: ReactN
 export function Disclaimer({ children }: { children?: ReactNode }) {
   return (
     <p className="mt-6 border-t border-line pt-3 text-[11px] leading-relaxed text-muted">
-      {children ??
-        "Conteúdo educacional e analítico. A Avermont não é instituição financeira, não executa ordens, não custodia recursos e não oferece recomendação individualizada de investimento. Previsões são estimativas estatísticas com incerteza e não garantem preços, retornos ou economias futuras."}
+      {children ?? "Informação educativa — não é recomendação de investimento. Previsões podem errar."}
     </p>
+  );
+}
+
+/** Conteúdo técnico recolhido: aparece só para quem quiser se aprofundar. */
+export function Details({ title = "Ver detalhes técnicos", children, open }: { title?: ReactNode; children: ReactNode; open?: boolean }) {
+  return (
+    <details open={open} className="group panel">
+      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium text-fg-2 hover:text-fg">
+        <span>{title}</span>
+        <span className="text-xs text-muted transition-transform group-open:rotate-180">▼</span>
+      </summary>
+      <div className="space-y-5 border-t border-line p-4">{children}</div>
+    </details>
+  );
+}
+
+/** Bloco de resumo em linguagem simples. */
+export function Summary({ items, title = "Em resumo" }: { items: ReactNode[]; title?: ReactNode }) {
+  return (
+    <div className="panel border-l-4 border-l-brand p-4">
+      <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-brand">{title}</div>
+      <ul className="space-y-1.5 text-[15px] leading-relaxed text-fg">
+        {items.map((it, i) => <li key={i} className="flex gap-2"><span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />{it}</li>)}
+      </ul>
+    </div>
   );
 }

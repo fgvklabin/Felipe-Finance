@@ -4,7 +4,7 @@ import { Badge, Card, CardBody, CardHeader, Disclaimer, Notice, PageHeader, Stat
 import { Change } from "@/components/market/bits";
 import { MiniLine } from "@/components/charts/MiniLine";
 import { WatchButton } from "@/components/WatchButton";
-import { EXPOSURE_LABEL, TAG_LABEL } from "@/components/invest/FundsTable";
+import { EXPOSURE_LABEL, TAG_LABEL } from "@/lib/beneficiaries";
 import { findFund, getFunds } from "@/lib/market";
 import { getCurrentUser } from "@/lib/auth";
 import { isWatched } from "@/lib/watchlist";
@@ -25,7 +25,7 @@ export default async function FundPage({ params }: { params: Promise<{ cnpj: str
   ];
   return (
     <div className="space-y-5">
-      <PageHeader eyebrow={<Link href="/invest/fundos">Fundos</Link>} accent="var(--gold)" title={f.name} subtitle={`CNPJ ${f.cnpj} · ${f.manager ?? "gestor não informado"}`} right={<WatchButton itemType="fund" itemRef={cnpj} initial={watched} loggedIn={!!user} />} />
+      <PageHeader eyebrow={<Link href="/beneficiarios">Ações e fundos beneficiados</Link>} accent="var(--gold)" title={f.name} subtitle={`CNPJ ${f.cnpj} · ${f.manager ?? "gestor não informado"}`} right={<WatchButton itemType="fund" itemRef={cnpj} initial={watched} loggedIn={!!user} />} />
       <div className="flex flex-wrap gap-2"><Badge tone={EXPOSURE_LABEL[f.exposureType]?.tone}>{EXPOSURE_LABEL[f.exposureType]?.label}</Badge>{f.tags.map((t) => <Badge key={t} tone="gold">{TAG_LABEL[t] ?? t}</Badge>)}</div>
       <Notice tone="gold">Exposição {f.exposureBasis}. Hedge, derivativos e alavancagem só podem ser avaliados com a carteira divulgada (CDA), ainda não integrada — por isso o simulador não gera números para este fundo.{f.vehicle === "fiagro" && " Fiagros costumam investir em crédito (CRAs) e imóveis rurais: não presumimos exposição direta a preços agrícolas."}</Notice>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-6">

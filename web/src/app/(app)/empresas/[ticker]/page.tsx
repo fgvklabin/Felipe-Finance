@@ -41,7 +41,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ ticker
   return (
     <div className="space-y-5">
       <PageHeader
-        eyebrow={<Link href="/invest/empresas">Empresas e Ações</Link>}
+        eyebrow={<Link href="/beneficiarios">Ações e fundos beneficiados</Link>}
         accent="var(--blue)"
         title={<span className="flex flex-wrap items-center gap-3">{c.tickersGiven.join(" / ")} <span className="text-lg font-normal text-fg-2">{c.name}</span></span>}
         subtitle={c.activityDescription ?? undefined}

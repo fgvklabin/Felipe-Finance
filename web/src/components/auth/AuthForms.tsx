@@ -55,7 +55,7 @@ export function LoginForm() {
 }
 
 const TYPES = [
-  { id: "investor", icon: LineChart, title: "Investidor", body: "Avermont Invest: empresas, fundos, carteira e simulações educacionais." },
+  { id: "investor", icon: LineChart, title: "Investidor", body: "Mercados, previsões, ações e fundos expostos a commodities, carteira e simulador." },
   { id: "business", icon: Building2, title: "Empresa compradora", body: "Avermont Business: custos de compra, fornecedores e cenários." },
   { id: "supplier", icon: Truck, title: "Fornecedor", body: "Receba pedidos de cotação e responda a compradores." },
 ] as const;

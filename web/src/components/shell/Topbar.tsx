@@ -129,8 +129,8 @@ export function Topbar({ locale, theme, dataMode, user, unread }: Props) {
       </header>
       {dataMode === "all" && (
         <div className="border-b border-violet-500/20 bg-violet-500/5 px-4 py-1 text-center text-[11px] text-fg-2 md:px-5">
-          Modo <b>Real + Demonstração</b>: séries marcadas <span className="font-semibold text-violet-400">DEMO</span> são sintéticas e não representam preços de mercado.{" "}
-          <button className="underline" onClick={toggleData}>Ver somente dados reais</button>
+          Itens <span className="font-semibold text-violet-400">DEMO</span> são apenas demonstração.{" "}
+          <button className="underline" onClick={toggleData}>Esconder</button>
         </div>
       )}
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} locale={locale} />

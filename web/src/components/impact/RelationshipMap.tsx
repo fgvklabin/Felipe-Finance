@@ -78,7 +78,7 @@ export function RelationshipMap({ links, correlations, names }: { links: ImpactL
               <Badge>{selected.kind === "correlation" ? "Correlação" : TYPE_LABEL[selected.kind]}</Badge>
             </div>
             {selected.effect && <p className="text-fg-2"><b>Canal:</b> {selected.effect.channel}</p>}
-            {selected.effect?.ref && <Link href={`/invest/empresas/${selected.effect.ref}`} className="mt-1 inline-block text-blue underline">Ver análise da empresa {selected.effect.ref} →</Link>}
+            {selected.effect?.ref && <Link href={`/empresas/${selected.effect.ref}`} className="mt-1 inline-block text-blue underline">Ver análise da empresa {selected.effect.ref} →</Link>}
             {selected.kind === "correlation" && (selected.corr ? (
               <p className="text-fg-2">Correlação de retornos mensais (10 anos): <b>{selected.corr.r.toFixed(2)}</b>. Correlação não implica causalidade e varia ao longo do tempo.</p>
             ) : <p className="text-muted">Sem dados suficientes para calcular a correlação (série demonstrativa ou indisponível).</p>)}
@@ -92,7 +92,7 @@ export function RelationshipMap({ links, correlations, names }: { links: ImpactL
           <div><b>Incerteza:</b> {link.uncertainty}</div>
           <div className="mt-1"><b>Limitações:</b> {link.limitations}</div>
           <div className="mt-1"><b>Fontes:</b> {link.sources.join("; ")}</div>
-          <div className="mt-1 text-[11px] text-muted">Sensibilidade numérica estimada apenas onde há dados verificados (ver simulador do Avermont Invest).</div>
+          <div className="mt-1 text-[11px] text-muted">Sensibilidade numérica estimada apenas onde há dados verificados (ver Simulador de Cenários).</div>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { BRL_CURRENCIES, loadPortfolios } from "@/lib/portfolio-data";
 export const metadata = { title: "Minha Carteira" };
 
 export default async function PortfolioPage() {
-  const user = await requireUser("/invest/carteira");
+  const user = await requireUser("/carteira");
   const portfolios = await loadPortfolios(user.id);
   const cat = getCatalog();
   const usd = getSummaryItem("usdbrl")?.stats?.last ?? null;
@@ -24,7 +24,7 @@ export default async function PortfolioPage() {
   return (
     <div className="space-y-5">
       <PageHeader
-        eyebrow="Avermont Invest"
+        eyebrow="Ferramentas"
         accent="var(--blue)"
         title="Minha carteira personalizada"
         subtitle="Monte uma carteira simulada com moedas, commodities, ações ligadas a commodities, fundos e caixa. O valor é registrado todos os dias e projetado para os próximos meses com os modelos da Avermont."

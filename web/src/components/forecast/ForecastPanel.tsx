@@ -3,6 +3,7 @@ import { ForecastChart, type ForecastPoint } from "../charts/ForecastChart";
 import { Badge, Card, CardBody, CardHeader, Notice } from "../ui";
 import { fmtDate, fmtDateTime, fmtNumber, fmtPct, fmtPrice } from "@/lib/format";
 import type { CatalogInstrument, ForecastResult, HorizonForecast } from "@/lib/market";
+import { forecastSentence } from "@/lib/plain";
 
 const HLABEL: Record<string, string> = { "7d": "7 dias", "30d": "30 dias", "90d": "90 dias", "180d": "180 dias", "12m": "12 meses" };
 const STATUS: Record<HorizonForecast["status"], { label: string; tone: "green" | "gold" | "neutral" | "red" }> = {
@@ -33,12 +34,13 @@ export function ForecastPanel({ fc, history, inst, unitLabel }: { fc: ForecastRe
   return (
     <Card id="previsao">
       <CardHeader
-        title="Avermont Forecast Engine"
-        subtitle={`Gerada em ${fmtDateTime(fc.generatedAt)} · origem ${fmtDate(fc.origin.date)} (${fmtPrice(fc.origin.value)} ${unitLabel}) · ${fc.observations} observações`}
+        title="Previsão"
+        subtitle={`Calculada em ${fmtDateTime(fc.generatedAt)} a partir do preço de ${fmtDate(fc.origin.date)} (${fmtPrice(fc.origin.value)} ${unitLabel})`}
         accent="var(--blue)"
         right={<Badge tone="blue">Estatística · sem LLM</Badge>}
       />
       <CardBody className="space-y-4">
+        <p className="text-[15px] text-fg">{forecastSentence(fc, unitLabel)}</p>
         {anyExpired && (
           <Notice tone="gold" title="Fonte desatualizada">
             Parte dos horizontes já transcorreu porque a fonte não publicou dados mais recentes. As previsões expiradas aparecem no gráfico apenas para auditoria e não devem ser usadas para decisões.
@@ -50,7 +52,7 @@ export function ForecastPanel({ fc, history, inst, unitLabel }: { fc: ForecastRe
             <thead>
               <tr>
                 <th className="text-left">Horizonte</th><th className="text-left">Status</th><th className="text-right">Central</th>
-                <th className="text-right">Baixista (p10)</th><th className="text-right">Altista (p90)</th><th className="text-right">Variação esperada</th>
+                <th className="text-right">Cenário baixo</th><th className="text-right">Cenário alto</th><th className="text-right">Variação esperada</th>
                 <th className="text-left">Modelo publicado</th><th className="text-right">Ganho vs. naive</th><th className="text-right">Cobertura 80%</th>
               </tr>
             </thead>

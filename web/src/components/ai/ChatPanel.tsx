@@ -18,7 +18,7 @@ const SUGGESTIONS = [
   "Quais commodities são afetadas pelo crescimento da China?",
 ];
 
-export function ChatPanel({ conversationId: initialId, initialMessages = [], compact, loggedIn }: { conversationId?: string | null; initialMessages?: ChatMessage[]; compact?: boolean; loggedIn: boolean }) {
+export function ChatPanel({ conversationId: initialId, initialMessages = [], compact, loggedIn, initialQuestion }: { conversationId?: string | null; initialMessages?: ChatMessage[]; compact?: boolean; loggedIn: boolean; initialQuestion?: string }) {
   const pathname = usePathname();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [conversationId, setConversationId] = useState<string | null>(initialId ?? null);
@@ -28,6 +28,14 @@ export function ChatPanel({ conversationId: initialId, initialMessages = [], com
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, busy]);
+  const asked = useRef(false);
+  useEffect(() => {
+    if (initialQuestion && !asked.current) {
+      asked.current = true;
+      void send(initialQuestion);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuestion]);
 
   const send = async (text: string) => {
     const msg = text.trim();
@@ -44,7 +52,10 @@ export function ChatPanel({ conversationId: initialId, initialMessages = [], com
       });
       const data = await r.json();
       if (!r.ok) throw new Error(data.error ?? "Falha ao consultar a Avermont AI.");
-      if (data.conversationId) setConversationId(data.conversationId);
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
+        if (!compact && typeof window !== "undefined") window.history.replaceState(null, "", `/ai?c=${data.conversationId}`);
+      }
       setMessages((m) => [...m, { role: "assistant", content: data.answer, sources: data.sources, mode: data.mode }]);
     } catch (e) {
       setError((e as Error).message);

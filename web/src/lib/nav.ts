@@ -38,14 +38,11 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
-    key: "group.invest",
+    key: "group.tools",
     items: [
-      { key: "nav.invest", href: "/invest", icon: "LineChart" },
-      { key: "nav.portfolio", href: "/invest/carteira", icon: "Briefcase", requiresAuth: true },
-      { key: "nav.simulator", href: "/invest/simulador", icon: "FlaskRound" },
-      { key: "nav.companies", href: "/invest/empresas", icon: "Factory" },
-      { key: "nav.funds", href: "/invest/fundos", icon: "Landmark" },
-      { key: "nav.etfs", href: "/invest/etfs", icon: "Layers" },
+      { key: "nav.beneficiaries", href: "/beneficiarios", icon: "Landmark" },
+      { key: "nav.portfolio", href: "/carteira", icon: "Briefcase", requiresAuth: true },
+      { key: "nav.simulator", href: "/simulador", icon: "FlaskRound" },
     ],
   },
   {

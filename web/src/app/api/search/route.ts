@@ -29,12 +29,12 @@ export const GET = handler("search", async (req) => {
   }
   for (const co of getCompanies().companies) {
     const s = score(`${co.tickersGiven.join(" ")} ${co.name ?? ""}`, co.sector ?? "");
-    if (s) results.push({ type: "company", id: co.cnpj, label: `${co.tickersGiven.join("/")} — ${co.name}`, sub: co.sector ?? undefined, href: `/invest/empresas/${co.tickersGiven[0]}`, score: s + 0.3 });
+    if (s) results.push({ type: "company", id: co.cnpj, label: `${co.tickersGiven.join("/")} — ${co.name}`, sub: co.sector ?? undefined, href: `/empresas/${co.tickersGiven[0]}`, score: s + 0.3 });
   }
   if (q.length >= 2) {
     for (const f of getFunds().funds) {
       const s = score(f.name, `${f.tags.join(" ")} ${f.manager ?? ""} ${f.cnpj}`);
-      if (s) results.push({ type: f.vehicle === "etf" ? "etf" : "fund", id: f.cnpjDigits, label: f.name, sub: f.cnpj, href: `/invest/fundos/${f.cnpjDigits}`, score: s });
+      if (s) results.push({ type: f.vehicle === "etf" ? "etf" : "fund", id: f.cnpjDigits, label: f.name, sub: f.cnpj, href: `/fundos/${f.cnpjDigits}`, score: s });
     }
   }
   for (const ind of Object.values(getMacro().indicators)) {

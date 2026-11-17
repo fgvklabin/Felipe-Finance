@@ -21,7 +21,7 @@ export default async function Landing() {
   const nReal = rows.length;
   const features = [
     { icon: Building2, color: "#10B981", title: "Avermont Business", body: "Compare fornecedores pelo custo total de aquisição, simule cenários de compra e veja o impacto de preços e câmbio no seu custo.", href: "/business" },
-    { icon: LineChart, color: "#3B82F6", title: "Avermont Invest", body: "Entenda como commodities, câmbio e juros afetam empresas, fundos e ETFs ligados a recursos naturais — com dados oficiais da CVM.", href: "/invest" },
+    { icon: LineChart, color: "#3B82F6", title: "Ações e fundos expostos", body: "Para cada commodity, as companhias e os fundos que tendem a se beneficiar da alta — com dados oficiais da CVM e os fatores que podem anular o efeito.", href: "/beneficiarios" },
     { icon: TrendingUp, color: "#8B5CF6", title: "Forecast Engine", body: "Previsões estatísticas validadas fora da amostra, com intervalos de incerteza e teste contra o passeio aleatório. Sem números inventados.", href: "/previsoes" },
     { icon: Network, color: "#F59E0B", title: "Impact Engine", body: "Mapa de relações entre commodities, moedas, empresas e setores — com canais de transmissão, contrapontos e limitações.", href: "/impacto" },
     { icon: Sparkles, color: "#06B6D4", title: "Avermont AI", body: "Assistente que explica os mercados com dados verificados da plataforma, cita fontes e datas e admite quando a informação não existe.", href: "/ai" },
@@ -36,7 +36,7 @@ export default async function Landing() {
             <Link href="/visao-geral" className="hover:text-fg">Mercados</Link>
             <Link href="/previsoes" className="hover:text-fg">Previsões</Link>
             <Link href="/business" className="hover:text-fg">Business</Link>
-            <Link href="/invest" className="hover:text-fg">Invest</Link>
+            <Link href="/beneficiarios" className="hover:text-fg">Ações e fundos</Link>
             <Link href="/fontes" className="hover:text-fg">Fontes</Link>
           </nav>
           <div className="flex items-center gap-2">
@@ -97,8 +97,8 @@ export default async function Landing() {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-14">
-        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Uma plataforma, duas frentes</h2>
-        <p className="mt-2 max-w-2xl text-fg-2">Inteligência de commodities para quem compra matéria-prima e para quem investe em empresas e fundos ligados a recursos naturais.</p>
+        <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">Uma plataforma de inteligência de commodities</h2>
+        <p className="mt-2 max-w-2xl text-fg-2">Para quem compra matéria-prima e para quem acompanha empresas e fundos ligados a recursos naturais.</p>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
             <Link key={f.title} href={f.href} className="panel group p-5 transition-colors hover:border-line-strong">

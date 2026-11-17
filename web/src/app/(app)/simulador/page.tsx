@@ -31,7 +31,7 @@ export default function SimulatorPage() {
   return (
     <div className="space-y-5">
       <PageHeader
-        eyebrow="Avermont Invest"
+        eyebrow="Ferramentas"
         accent="var(--blue)"
         title="Simulador de impacto em carteiras e fundos"
         subtitle="Simule choques em commodities, câmbio e juros sobre uma carteira educacional ou um fundo existente. Números só aparecem para exposições diretas e verificáveis; o restante recebe análise qualitativa."

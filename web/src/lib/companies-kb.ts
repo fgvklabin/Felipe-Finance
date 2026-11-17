@@ -1,4 +1,4 @@
-// Base qualitativa das companhias ligadas a commodities (Avermont Invest).
+// Base qualitativa das companhias ligadas a commodities (ações ligadas a commodities).
 // Conteúdo descritivo, sem números: valores financeiros vêm exclusivamente da CVM (DFP).
 // Toda afirmação deve ser conferida nos relatórios de RI da companhia antes de qualquer decisão.
 

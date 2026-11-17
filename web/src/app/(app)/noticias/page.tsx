@@ -53,7 +53,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5 text-xs">
                   {n.relatedCommodities.map((c) => <Link key={c} href={`/commodity/${c}`}><Badge tone="green">{name(c)}</Badge></Link>)}
-                  {n.relatedCompanies.map((c) => <Link key={c} href={`/invest/empresas/${c}`}><Badge tone="blue">{c}</Badge></Link>)}
+                  {n.relatedCompanies.map((c) => <Link key={c} href={`/empresas/${c}`}><Badge tone="blue">{c}</Badge></Link>)}
                 </div>
                 <ShareCard title={n.title} summary={n.summary} source={n.source.label} date={fmtDate(n.date)} url={`/noticias#${n.id}`} />
               </CardBody>

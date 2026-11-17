@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ShieldCheck } from "lucide-react";
-import { Badge, Card, CardBody, CardHeader, Disclaimer, Notice, PageHeader, Stat } from "@/components/ui";
+import { Badge, Card, CardBody, CardHeader, Disclaimer, PageHeader, Stat, Summary } from "@/components/ui";
 import { getCatalog, getForecastArchive, getForecasts, getSummaryItem } from "@/lib/market";
 import { fmtDateTime, fmtNumber, fmtPct, fmtPrice } from "@/lib/format";
 
@@ -29,23 +29,24 @@ export default function ForecastsPage() {
       <PageHeader
         eyebrow="Avermont Forecast Engine"
         accent="var(--blue)"
-        title="Previsões quantitativas"
-        subtitle="Modelos estatísticos e de machine learning com validação walk-forward, baseline obrigatória e intervalos de incerteza calibrados empiricamente. Nenhum número é gerado por LLM."
+        title="Previsões"
+        subtitle="Para onde os preços podem ir — e com que confiança. Os números vêm de modelos estatísticos testados com dados do passado, nunca de chute."
         right={<span className="text-xs text-muted">Motor v{engineVersion} · {fmtDateTime(generatedAt)}</span>}
       />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        <Card className="p-3"><Stat label="Séries modeladas" value={all.length} sub="reais (demo não é modelada)" /></Card>
-        <Card className="p-3"><Stat label="Horizontes publicados" value={ok.length} sub={`de ${horizons.length} avaliados`} /></Card>
-        <Card className="p-3"><Stat label="Superam o naive (p<0,05)" value={beats.length} tone="text-up" sub="com significância estatística" /></Card>
-        <Card className="p-3"><Stat label="Candidatos melhores sem significância" value={candidatesBetter.length - beats.length} sub="descartados por cautela" /></Card>
-        <Card className="p-3"><Stat label="Cobertura média do intervalo 80%" value={fmtPct(avgCov, 0, false)} sub="fora da amostra" /></Card>
+        <Card className="p-3"><Stat label="Mercados analisados" value={all.length} /></Card>
+        <Card className="p-3"><Stat label="Previsões válidas hoje" value={ok.length} /></Card>
+        <Card className="p-3"><Stat label="Com tendência confiável" value={beats.length} tone="text-up" /></Card>
+        <Card className="p-3"><Stat label="Descartadas por cautela" value={candidatesBetter.length - beats.length} sub="melhora pequena demais" /></Card>
+        <Card className="p-3"><Stat label="Acerto da faixa provável" value={fmtPct(avgCov, 0, false)} sub="em testes com dados passados" /></Card>
       </div>
-      <Notice tone="blue" title="Como ler estes resultados">
-        Preços de commodities e câmbio se comportam de forma muito próxima a um passeio aleatório. Quando nenhum modelo supera essa baseline com significância estatística (teste de Diebold-Mariano com correção HAC),
-        publicamos o último preço como estimativa central e um intervalo de incerteza honesto. Isso é intencional: não inventamos confiança que os dados não sustentam. Em simulações com passeios aleatórios puros, cerca de 5–9% dos horizontes ainda passam no teste por acaso.
-      </Notice>
+      <Summary title="Como ler" items={[
+        "Preços de commodities e dólar são muito difíceis de prever. Na maior parte do tempo, a melhor aposta é que fiquem perto do valor atual.",
+        "Por isso, mostramos sempre uma faixa provável (onde o preço deve ficar na maioria das vezes), e não um número exato.",
+        "Só dizemos “tendência de alta” ou “de baixa” quando o modelo provou, em testes com dados antigos, que acerta mais do que simplesmente repetir o preço atual.",
+      ]} />
       <Card>
-        <CardHeader title="Painel de previsões" subtitle="Status por horizonte · clique para ver gráfico, cenários e avaliação" />
+        <CardHeader title="Todas as previsões" subtitle="Clique no nome para ver o gráfico" />
         <div className="overflow-x-auto">
           <table className="fin-table w-full min-w-[1100px] text-[13px]">
             <thead>

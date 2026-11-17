@@ -43,27 +43,25 @@ export function dailySummary() {
   const bullets: string[] = [];
   if (usd) {
     bullets.push(
-      `**Dólar (PTAX)** fechou em R$ ${fmtPrice(usd.stats.last)} em ${fmtDate(usd.stats.lastDate)} (${fmtPct(usd.stats.changes.d1, 2)} no dia, ${fmtPct(usd.stats.changes.m1)} em 30 dias, ${fmtPct(usd.stats.changes.ytd)} no ano).` +
-        (focusFx ? ` A mediana do Focus para o fim de ${year} é R$ ${fmtPrice(focusFx.Mediana)}.` : ""),
+      `**Dólar:** R$ ${fmtPrice(usd.stats.last)} (${fmtPct(usd.stats.changes.d1, 2)} no dia, ${fmtPct(usd.stats.changes.m1)} em 30 dias).` +
+        (focusFx ? ` O mercado espera R$ ${fmtPrice(focusFx.Mediana)} no fim de ${year}.` : ""),
     );
   }
-  if (macro.selic) bullets.push(`**Selic** (meta Copom) em ${fmtNumber(macro.selic.value, 2)}% a.a.; **IPCA 12 meses** em ${macro.ipca12 ? fmtNumber(macro.ipca12.value, 2) + "%" : "—"} (${macro.ipca12 ? fmtDate(macro.ipca12.date, "pt", { month: "short", year: "numeric", timeZone: "UTC" }) : ""}).`);
+  if (macro.selic) bullets.push(`**Juros e inflação:** Selic em ${fmtNumber(macro.selic.value, 2)}% ao ano; inflação de ${macro.ipca12 ? fmtNumber(macro.ipca12.value, 2) + "%" : "—"} em 12 meses.`);
   if (byY1.length >= 2) {
     const top = byY1.slice(0, 3).map((i) => `${i.name.pt} (${fmtPct(i.stats.changes.y1)})`).join(", ");
     const bottom = byY1.slice(-3).reverse().map((i) => `${i.name.pt} (${fmtPct(i.stats.changes.y1)})`).join(", ");
-    bullets.push(`**Maiores altas em 12 meses** (preços internacionais mensais): ${top}. **Maiores quedas**: ${bottom}.`);
+    bullets.push(`**Mais subiram em 12 meses:** ${top}. **Mais caíram:** ${bottom}.`);
   }
   const fc = getForecasts().forecasts;
   const beats = Object.values(fc).flatMap((f) => Object.entries(f.horizons).filter(([, h]) => h.status === "ok" && h.beatsBaseline).map(([lb]) => `${f.id} ${lb}`));
   bullets.push(
     beats.length
-      ? `**Forecast Engine**: modelos com ganho estatisticamente significativo sobre o passeio aleatório em ${beats.length} horizonte(s) publicados (${beats.slice(0, 4).join(", ")}). Nos demais, publicamos o passeio aleatório com intervalo empírico.`
-      : "**Forecast Engine**: nenhum modelo superou o passeio aleatório com significância estatística nos horizontes vigentes; as previsões publicadas usam o último preço como estimativa central, com intervalo empírico.",
+      ? `**Previsões:** os modelos encontraram tendência confiável em ${beats.length} caso(s). No resto, a melhor estimativa é o preço atual.`
+      : "**Previsões:** nenhuma tendência confiável no momento — a melhor estimativa é o preço atual, com uma faixa de variação provável.",
   );
   if (stale.length) {
-    bullets.push(
-      `⚠️ **Dados desatualizados**: ${stale.length} séries de commodities têm última observação em ${fmtDate(lastCommodityDate, "pt", { month: "long", year: "numeric", timeZone: "UTC" })}. A edição mais recente da fonte (Banco Mundial) ainda não foi integrada nesta implantação.`,
-    );
+    bullets.push(`⚠️ **Atenção:** os preços de ${stale.length} commodities vão só até ${fmtDate(lastCommodityDate, "pt", { month: "long", year: "numeric", timeZone: "UTC" })} (última edição disponível da fonte oficial).`);
   }
   return { generatedAt: getSummary().generatedAt, bullets };
 }
