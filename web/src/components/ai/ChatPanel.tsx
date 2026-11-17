@@ -27,7 +27,9 @@ export function ChatPanel({ conversationId: initialId, initialMessages = [], com
   const [error, setError] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), [messages, busy]);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, busy]);
   const asked = useRef(false);
   useEffect(() => {
     if (initialQuestion && !asked.current) {

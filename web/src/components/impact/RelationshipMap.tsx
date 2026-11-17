@@ -14,12 +14,11 @@ export function RelationshipMap({ links, correlations, names }: { links: ImpactL
   const [driver, setDriver] = useState(links[0]?.driver);
   const [sel, setSel] = useState<string | null>(null);
   const link = links.find((l) => l.driver === driver)!;
-  const corr = correlations[driver] ?? {};
   const nodes = useMemo(() => {
     const effects = link.effects.map((e) => ({ key: e.target, label: e.target, kind: e.targetType, color: DIR_COLOR[e.direction], effect: e, corr: null as null | { r: number } }));
-    const corrNodes = (link.correlationWith ?? []).map((id) => ({ key: `corr-${id}`, label: names[id] ?? id, kind: "correlation", color: "#06B6D4", effect: null, corr: corr[id] ?? null }));
+    const corrNodes = (link.correlationWith ?? []).map((id) => ({ key: `corr-${id}`, label: names[id] ?? id, kind: "correlation", color: "#06B6D4", effect: null, corr: correlations[driver]?.[id] ?? null }));
     return [...effects, ...corrNodes];
-  }, [link, corr, names]);
+  }, [link, correlations, driver, names]);
   const W = 640, H = 440, cx = W / 2, cy = H / 2, R = 165;
   const selected = nodes.find((n) => n.key === sel);
 

@@ -56,5 +56,5 @@ export const GET = handler("search", async (req) => {
     for (const s of sup) results.push({ type: "supplier", id: s.id, label: s.name, sub: s.city ?? undefined, href: "/business/fornecedores", demo: s.is_demo, score: 1.5 });
   }
   results.sort((a, b) => b.score - a.score);
-  return json({ results: results.slice(0, 30).map(({ score: _s, ...r }) => r) });
+  return json({ results: results.slice(0, 30).map((r) => ({ type: r.type, id: r.id, label: r.label, sub: r.sub, href: r.href, demo: r.demo })) });
 });

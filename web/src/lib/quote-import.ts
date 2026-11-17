@@ -63,7 +63,8 @@ export function parseNumber(v: unknown): number | null {
   let s = String(v).replace(/[^\d,.\-]/g, "");
   if (!s) return null;
   const lastComma = s.lastIndexOf(","), lastDot = s.lastIndexOf(".");
-  if (lastComma > lastDot) s = s.replace(/\./g, "").replace(",", ".");
+  if (lastComma === -1 && /^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, ""); // "1.000" = mil (padrão brasileiro)
+  else if (lastComma > lastDot) s = s.replace(/\./g, "").replace(",", ".");
   else s = s.replace(/,/g, "");
   const n = Number(s);
   return Number.isFinite(n) ? n : null;

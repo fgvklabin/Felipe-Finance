@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useId } from "react";
 import {
   Bell, Briefcase, Building2, CalendarDays, CandlestickChart, Circle, Coins, Database, Factory, Flame, FlaskConical, FlaskRound, Hexagon, Landmark,
   LayoutDashboard, Layers, LineChart, Lock, Network, Newspaper, Pickaxe, Scale, Settings, ShieldCheck, Sparkles, Spline, Star,
@@ -19,18 +20,19 @@ import type { Locale } from "@/lib/format";
 import { cn } from "../ui";
 
 export function Logo({ compact }: { compact?: boolean }) {
+  const gid = `avm-g-${useId().replace(/:/g, "")}`;
   return (
     <Link href="/" className="flex items-center gap-2.5" aria-label="Avermont — início">
       <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden>
         <defs>
-          <linearGradient id="avm-g" x1="0" y1="1" x2="1" y2="0">
+          <linearGradient id={gid} x1="0" y1="1" x2="1" y2="0">
             <stop offset="0%" stopColor="#10B981" />
             <stop offset="55%" stopColor="#3B82F6" />
             <stop offset="100%" stopColor="#8B5CF6" />
           </linearGradient>
         </defs>
-        <rect width="32" height="32" rx="8" fill="#0B1423" stroke="url(#avm-g)" strokeWidth="1.5" />
-        <path d="M6 23 L13 9 L17 17 L20 12 L26 23" fill="none" stroke="url(#avm-g)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <rect width="32" height="32" rx="8" fill="#0B1423" stroke={`url(#${gid})`} strokeWidth="1.5" />
+        <path d="M6 23 L13 9 L17 17 L20 12 L26 23" fill="none" stroke={`url(#${gid})`} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
         <circle cx="20" cy="12" r="1.8" fill="#F59E0B" />
       </svg>
       {!compact && (

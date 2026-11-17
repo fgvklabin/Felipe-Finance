@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "db:import": "tsx --conditions=react-server scripts/db-import.ts",
+    "worker": "cd ../worker && python3 -m avermont_worker.run all",
+    "test:e2e": "node e2e/smoke.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.9.0",

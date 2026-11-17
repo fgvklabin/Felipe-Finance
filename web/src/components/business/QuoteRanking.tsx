@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { Calculator, Trash2 } from "lucide-react";
 import { compareProposals, rankQuotes, type FxRates, type Quote } from "@/lib/procurement";
 import { fmtDate, fmtMoney, fmtNumber, fmtPct } from "@/lib/format";
-import { Badge, btnClass, cn, inputClass, labelClass } from "../ui";
+import { Badge, cn, inputClass, labelClass } from "../ui";
 
 export interface QuoteRow extends Quote {
   product: string; specification: string | null; quality: string | null; delivery_location: string | null; contact: string | null;

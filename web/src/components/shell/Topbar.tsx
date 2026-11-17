@@ -75,7 +75,8 @@ export function Topbar({ locale, theme, dataMode, user, unread }: Props) {
           className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border border-line bg-panel px-3 text-left text-sm text-muted hover:border-line-strong md:max-w-xl"
         >
           <Search size={15} />
-          <span className="truncate">{t("search.placeholder", locale)}</span>
+          <span className="hidden truncate sm:inline">{t("search.placeholder", locale)}</span>
+          <span className="truncate sm:hidden">Buscar</span>
           <kbd className="ml-auto hidden rounded border border-line px-1.5 text-[10px] md:inline">Ctrl K</kbd>
         </button>
         <div className="ml-auto flex items-center gap-1">
@@ -90,7 +91,7 @@ export function Topbar({ locale, theme, dataMode, user, unread }: Props) {
             <Database size={13} />
             {dataMode === "real" ? t("mode.real", locale) : t("mode.all", locale)}
           </button>
-          <button className={btnClass("ghost", "sm")} onClick={toggleLang} title="Idioma / Language" aria-label="Alternar idioma">
+          <button className={cn(btnClass("ghost", "sm"), "max-sm:hidden")} onClick={toggleLang} title="Idioma / Language" aria-label="Alternar idioma">
             <Languages size={16} />
             <span className="text-[11px] font-semibold">{locale.toUpperCase()}</span>
           </button>
@@ -122,7 +123,7 @@ export function Topbar({ locale, theme, dataMode, user, unread }: Props) {
           ) : (
             <>
               <Link href="/login" className={btnClass("ghost", "sm")}>{t("auth.login", locale)}</Link>
-              <Link href="/cadastro" className={cn(btnClass("primary", "sm"), "hidden sm:inline-flex")}>{t("auth.register", locale)}</Link>
+              <span className="hidden sm:block"><Link href="/cadastro" className={btnClass("primary", "sm")}>{t("auth.register", locale)}</Link></span>
             </>
           )}
         </div>

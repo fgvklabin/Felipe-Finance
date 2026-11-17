@@ -1,0 +1,43 @@
+name: Ingestão diária de dados
+
+# Atualiza os snapshots de mercado a partir das fontes oficiais, recalcula previsões e
+# (opcionalmente) carrega tudo no Postgres de produção. Cada fonte é atualizada conforme sua
+# frequência real de publicação; o worker reaproveita downloads recentes via cache.
+on:
+  schedule:
+    - cron: "41 17 * * 1-5" # dias úteis, após a PTAX de fechamento (~13h BRT)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    env:
+      HAS_DB: ${{ secrets.DATABASE_URL != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r worker/requirements.txt
+      - name: Pipeline de dados
+        working-directory: worker
+        env:
+          WORLDBANK_PINK_SHEET_URL: ${{ vars.WORLDBANK_PINK_SHEET_URL }}
+        run: python -m avermont_worker.run all
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: web/package-lock.json }
+      - name: Carga no Postgres (se configurado)
+        if: env.HAS_DB == 'true'
+        working-directory: web
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm ci && npm run db:import
+      - name: Versiona snapshots atualizados
+        run: |
+          git config user.name "avermont-data-bot"
+          git config user.email "avermont-data-bot@users.noreply.github.com"
+          git add web/data
+          git diff --cached --quiet || git commit -m "dados: atualização automática $(date -u +%F)"
+          git push

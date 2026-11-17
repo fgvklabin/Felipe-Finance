@@ -12,9 +12,8 @@ SERIES_DIR = MARKET_DIR / "series"
 CACHE_DIR = Path(os.environ.get("AVERMONT_CACHE_DIR", ROOT / "worker" / ".cache"))
 
 # World Bank "Pink Sheet" — CC BY 4.0. A URL muda a cada edição mensal; atualize via env.
-WORLDBANK_PINK_SHEET_URL = os.environ.get(
-    "WORLDBANK_PINK_SHEET_URL",
-    "https://thedocs.worldbank.org/en/doc/18675f1d1639c7a34d463f59263ba0a2-0050012025/related/CMO-Historical-Data-Monthly.xlsx",
+WORLDBANK_PINK_SHEET_URL = os.environ.get("WORLDBANK_PINK_SHEET_URL") or (
+    "https://thedocs.worldbank.org/en/doc/18675f1d1639c7a34d463f59263ba0a2-0050012025/related/CMO-Historical-Data-Monthly.xlsx"
 )
 
 BCB_SGS_URL = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.{code}/dados"
