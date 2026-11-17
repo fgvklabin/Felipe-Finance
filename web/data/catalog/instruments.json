@@ -1,0 +1,530 @@
+{
+  "_comment": "Catálogo canônico de instrumentos do Avermont. Lido pelo worker Python (ingestão) e pelo app web. dataMode: real = fonte oficial/licenciada integrada; demo = índice demonstrativo base 100 (NÃO é preço de mercado); unavailable = sem fonte integrada. Fundamentos são qualitativos; números de produção/estoque exigem integração USDA PSD / Conab (fase 2).",
+  "categories": [
+    { "id": "agricolas", "name": { "pt": "Commodities Agrícolas", "en": "Agricultural" }, "color": "#84CC16" },
+    { "id": "metais", "name": { "pt": "Metais", "en": "Metals" }, "color": "#3B82F6" },
+    { "id": "metais-preciosos", "name": { "pt": "Metais Preciosos", "en": "Precious Metals" }, "color": "#F59E0B" },
+    { "id": "polimeros", "name": { "pt": "Polímeros", "en": "Polymers" }, "color": "#8B5CF6" },
+    { "id": "quimicos", "name": { "pt": "Químicos e Fertilizantes", "en": "Chemicals & Fertilizers" }, "color": "#06B6D4" },
+    { "id": "papel-celulose", "name": { "pt": "Papel e Celulose", "en": "Pulp & Paper" }, "color": "#F472B6" },
+    { "id": "energia", "name": { "pt": "Energia", "en": "Energy" }, "color": "#F97316" },
+    { "id": "moedas", "name": { "pt": "Moedas", "en": "Currencies" }, "color": "#38BDF8" }
+  ],
+  "instruments": [
+    {
+      "id": "soja", "name": { "pt": "Soja em grão", "en": "Soybeans" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Soybeans",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Soja dos EUA, FOB Golfo dos EUA (desde jan/2025; antes CIF Roterdã) — preço mensal médio",
+      "conversions": [{ "label": "US$/saca 60 kg", "factor": 0.06 }],
+      "brazilRef": "Indicador CEPEA/ESALQ Paranaguá (R$/saca) — requer licenciamento para redistribuição comercial",
+      "fundamentals": {
+        "producers": ["Brasil", "Estados Unidos", "Argentina", "China", "Paraguai"],
+        "consumers": ["China (importadora dominante)", "Estados Unidos", "Argentina (esmagamento)", "União Europeia"],
+        "drivers": ["Demanda de importação chinesa para ração", "Safras de Brasil e EUA", "Câmbio BRL/USD (preço em reais ao produtor)", "Margem de esmagamento (farelo e óleo)", "Política de biodiesel (óleo)"],
+        "seasonality": "Colheita brasileira concentrada em jan–abr; norte-americana em set–nov. A oferta sul-americana costuma pressionar prêmios no 1º semestre.",
+        "weather": "La Niña/El Niño afetam Sul do Brasil e Argentina; estiagem no Centro-Oeste na fase de enchimento de grãos.",
+        "logistics": "Frete rodoviário até portos (Paranaguá, Santos, Arco Norte) e frete marítimo para a China.",
+        "geopolitics": "Tarifas comerciais EUA–China redirecionam demanda para o Brasil."
+      },
+      "related": { "companies": ["SLCE3", "AGRO3", "TTEN3"], "currencies": ["usdbrl", "cnybrl"] }
+    },
+    {
+      "id": "milho", "name": { "pt": "Milho", "en": "Corn" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Maize",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Milho dos EUA nº 2 amarelo, FOB portos do Golfo dos EUA — média mensal",
+      "conversions": [{ "label": "US$/saca 60 kg", "factor": 0.06 }],
+      "brazilRef": "Indicador CEPEA/ESALQ Campinas (R$/saca) — requer licenciamento",
+      "fundamentals": {
+        "producers": ["Estados Unidos", "China", "Brasil", "Argentina", "Ucrânia"],
+        "consumers": ["Estados Unidos (ração e etanol)", "China", "União Europeia", "Brasil (ração e etanol de milho)"],
+        "drivers": ["Demanda de ração animal (aves, suínos)", "Etanol de milho nos EUA e no Brasil", "Safrinha brasileira", "Exportações ucranianas"],
+        "seasonality": "Safrinha brasileira colhida jun–ago; colheita nos EUA set–nov.",
+        "weather": "Janela de plantio da safrinha após a soja; risco de geada e seca no Paraná e MS.",
+        "logistics": "Custos de frete interno representam parcela relevante do preço FOB no Brasil.",
+        "geopolitics": "Conflito no Mar Negro afeta oferta exportável da Ucrânia."
+      },
+      "related": { "companies": ["SLCE3", "TTEN3", "AGRO3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "trigo", "name": { "pt": "Trigo", "en": "Wheat" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Wheat, US HRW",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Trigo dos EUA nº 2 Hard Red Winter, exportação no Golfo dos EUA — média mensal",
+      "conversions": [],
+      "brazilRef": "Indicador CEPEA trigo PR/RS — requer licenciamento. O Brasil é importador líquido (Argentina é a principal origem).",
+      "fundamentals": {
+        "producers": ["China", "Índia", "Rússia", "Estados Unidos", "União Europeia"],
+        "consumers": ["China", "Índia", "União Europeia", "Rússia", "Brasil (importador)"],
+        "drivers": ["Exportações russas e do Mar Negro", "Estoques globais", "Câmbio (Brasil importa)", "Clima no Hemisfério Norte"],
+        "seasonality": "Colheita de inverno no Hemisfério Norte em jun–ago; Argentina em dez–jan.",
+        "weather": "Seca nas planícies dos EUA e na Rússia; excesso de chuva na colheita afeta qualidade.",
+        "logistics": "Frete marítimo da Argentina e América do Norte para moinhos brasileiros.",
+        "geopolitics": "Guerra Rússia–Ucrânia e cotas/impostos de exportação russos."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "arroz", "name": { "pt": "Arroz", "en": "Rice" }, "category": "agricolas", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Rice, Thai 5%",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Arroz tailandês 5% quebrados, branco, beneficiado, FOB Bangkok — média mensal",
+      "conversions": [],
+      "brazilRef": "Indicador CEPEA/IRGA arroz em casca RS — requer licenciamento",
+      "fundamentals": {
+        "producers": ["China", "Índia", "Bangladesh", "Indonésia", "Vietnã", "Tailândia"],
+        "consumers": ["China", "Índia", "Bangladesh", "Indonésia"],
+        "drivers": ["Políticas de exportação da Índia", "Monções asiáticas", "Estoques públicos"],
+        "seasonality": "Safra principal asiática no 2º semestre; no Brasil, colheita gaúcha em fev–abr.",
+        "weather": "Monções e El Niño na Ásia; enchentes no Rio Grande do Sul.",
+        "logistics": "Mercado internacional relativamente fino; o Brasil é quase autossuficiente.",
+        "geopolitics": "Restrições de exportação (ex.: Índia) causam choques de preço."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "sorgo", "name": { "pt": "Sorgo", "en": "Sorghum" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Sorghum",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Sorgo dos EUA nº 2 milo amarelo, FOB portos do Golfo — média mensal",
+      "conversions": [{ "label": "US$/saca 60 kg", "factor": 0.06 }],
+      "brazilRef": "Sem indicador físico amplamente difundido; preços regionais via cooperativas.",
+      "fundamentals": {
+        "producers": ["Estados Unidos", "Nigéria", "Etiópia", "Índia", "Brasil"],
+        "consumers": ["China", "Estados Unidos", "México"],
+        "drivers": ["Substituição do milho na ração", "Demanda chinesa", "Etanol"],
+        "seasonality": "Segue em parte o calendário do milho; no Brasil é cultura de segunda safra.",
+        "weather": "Mais tolerante à seca que o milho.",
+        "logistics": "Semelhante ao milho.",
+        "geopolitics": "Sensível a tarifas EUA–China."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "algodao", "name": { "pt": "Algodão", "en": "Cotton" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Cotton, A Index",
+      "unit": "kg", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Cotlook A Index, middling 1-3/32\", Extremo Oriente C/F — média mensal",
+      "conversions": [{ "label": "US¢/lb", "factor": 45.359237 }],
+      "brazilRef": "Indicador CEPEA/ESALQ algodão em pluma (¢R$/lp) — requer licenciamento",
+      "fundamentals": {
+        "producers": ["China", "Índia", "Brasil", "Estados Unidos", "Paquistão"],
+        "consumers": ["China", "Índia", "Paquistão", "Bangladesh", "Vietnã", "Turquia"],
+        "drivers": ["Demanda da indústria têxtil asiática", "Concorrência com fibras sintéticas (poliéster)", "Exportações brasileiras e norte-americanas", "Câmbio"],
+        "seasonality": "Colheita brasileira jun–set (MT, BA); EUA set–dez.",
+        "weather": "Seca no Texas; regime de chuvas no Cerrado.",
+        "logistics": "Exportação por contêiner via Santos; prazos de embarque relevantes.",
+        "geopolitics": "Restrições a algodão de Xinjiang reorganizam fluxos de comércio."
+      },
+      "related": { "companies": ["SLCE3", "AGRO3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "cafe-arabica", "name": { "pt": "Café Arábica", "en": "Coffee Arabica" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Coffee, Arabica",
+      "unit": "kg", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Preço indicativo OIC 'outros suaves' Arábica, média Nova York e Bremen/Hamburgo — média mensal",
+      "conversions": [{ "label": "US$/saca 60 kg", "factor": 60 }, { "label": "US¢/lb", "factor": 45.359237 }],
+      "brazilRef": "Indicador CEPEA/ESALQ café arábica tipo 6 (R$/saca) — requer licenciamento",
+      "fundamentals": {
+        "producers": ["Brasil", "Colômbia", "Etiópia", "Honduras", "Peru"],
+        "consumers": ["União Europeia", "Estados Unidos", "Brasil", "Japão"],
+        "drivers": ["Safra brasileira (bienalidade do arábica)", "Estoques certificados na bolsa ICE", "Câmbio BRL (ritmo de venda do produtor)", "Clima em Minas Gerais"],
+        "seasonality": "Colheita brasileira mai–set; bienalidade alterna anos de alta e baixa produção.",
+        "weather": "Geadas e secas no Sul de Minas e Cerrado Mineiro são os principais choques de oferta.",
+        "logistics": "Exportação em contêiner via Santos e Rio de Janeiro.",
+        "geopolitics": "Regras ambientais da UE (EUDR) sobre rastreabilidade."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "cafe-robusta", "name": { "pt": "Café Robusta (Conilon)", "en": "Coffee Robusta" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Coffee, Robusta",
+      "unit": "kg", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Preço indicativo OIC Robustas, média Nova York e Le Havre/Marselha — média mensal",
+      "conversions": [{ "label": "US$/saca 60 kg", "factor": 60 }],
+      "brazilRef": "Indicador CEPEA conilon tipo 7 Vitória (R$/saca) — requer licenciamento",
+      "fundamentals": {
+        "producers": ["Vietnã", "Brasil (conilon, ES e RO)", "Indonésia", "Uganda"],
+        "consumers": ["União Europeia", "Indústria de solúvel global"],
+        "drivers": ["Safra vietnamita", "Demanda de café solúvel", "Diferencial arábica–robusta"],
+        "seasonality": "Colheita vietnamita out–jan; conilon brasileiro abr–jul.",
+        "weather": "Seca nas Terras Altas Centrais do Vietnã; chuvas no Espírito Santo.",
+        "logistics": "Frete de contêiner Ásia–Europa.",
+        "geopolitics": "Rotas marítimas do Mar Vermelho afetam fretes Ásia–Europa."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "acucar", "name": { "pt": "Açúcar bruto", "en": "Raw sugar" }, "category": "agricolas", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Sugar, world",
+      "unit": "kg", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Preço diário ISA (International Sugar Agreement), bruto, FOB portos do Caribe — média mensal",
+      "conversions": [{ "label": "US¢/lb", "factor": 45.359237 }, { "label": "US$/t", "factor": 1000 }],
+      "brazilRef": "Indicador CEPEA/ESALQ açúcar cristal (R$/saca 50 kg) — requer licenciamento",
+      "fundamentals": {
+        "producers": ["Brasil (maior exportador)", "Índia", "Tailândia", "China", "União Europeia"],
+        "consumers": ["Índia", "União Europeia", "China", "Estados Unidos", "Indonésia"],
+        "drivers": ["Mix açúcar/etanol das usinas do Centro-Sul", "Preço da gasolina/Petrobras (paridade do etanol)", "Política de exportação da Índia", "Câmbio BRL"],
+        "seasonality": "Safra do Centro-Sul abr–nov; Índia e Tailândia nov–abr.",
+        "weather": "Seca e incêndios em canaviais de SP; monções na Índia.",
+        "logistics": "Exportação a granel via Santos e Paranaguá; fila de navios.",
+        "geopolitics": "Subsídios e cotas de exportação indianos."
+      },
+      "related": { "companies": ["SMTO3", "JALL3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "cana", "name": { "pt": "Cana-de-açúcar (ATR)", "en": "Sugarcane (TRS)" }, "category": "agricolas", "kind": "raw",
+      "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null,
+      "unit": "índice", "currency": "IDX", "frequency": "monthly",
+      "benchmark": "DEMONSTRAÇÃO — índice base 100. Referência real: preço do ATR Consecana-SP (R$/kg ATR), cuja integração depende de autorização.",
+      "conversions": [],
+      "brazilRef": "Consecana-SP (preço do ATR) — integração pendente",
+      "fundamentals": {
+        "producers": ["Brasil (Centro-Sul)", "Índia", "Tailândia", "China"],
+        "consumers": ["Usinas de açúcar e etanol"],
+        "drivers": ["Preços de açúcar e etanol (o ATR é derivado deles)", "Produtividade agrícola (TCH)", "Clima"],
+        "seasonality": "Safra abr–nov no Centro-Sul.",
+        "weather": "Déficit hídrico reduz o ATR e a produtividade.",
+        "logistics": "Cana é processada próxima ao canavial (raio econômico curto).",
+        "geopolitics": "Política de combustíveis e RenovaBio."
+      },
+      "related": { "companies": ["SMTO3", "JALL3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "farelo-soja", "name": { "pt": "Farelo de soja", "en": "Soybean meal" }, "category": "agricolas", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Soybean meal",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Farelo de soja dos EUA, 48% proteína, FOB Roterdã (desde jan/2025; antes pellets brasileiros CIF Roterdã) — média mensal",
+      "conversions": [],
+      "brazilRef": "Preços regionais de farelo (cooperativas e tradings); CEPEA — requer licenciamento",
+      "fundamentals": {
+        "producers": ["Argentina (maior exportador)", "Brasil", "Estados Unidos", "China"],
+        "consumers": ["União Europeia", "Sudeste Asiático", "Brasil (ração)"],
+        "drivers": ["Ritmo de esmagamento (ligado à demanda de óleo para biodiesel)", "Demanda de ração", "Greves e câmbio na Argentina"],
+        "seasonality": "Pico de esmagamento sul-americano no 1º semestre.",
+        "weather": "Segue as safras de soja.",
+        "logistics": "Insumo crítico para fábricas de ração; frete rodoviário pesa no preço posto.",
+        "geopolitics": "Política tributária argentina (retenciones)."
+      },
+      "related": { "companies": ["TTEN3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "oleo-soja", "name": { "pt": "Óleo de soja", "en": "Soybean oil" }, "category": "agricolas", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Soybean oil",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Óleo de soja dos EUA bruto degomado, FOB Golfo dos EUA (desde jan/2025; antes holandês EXW) — média mensal",
+      "conversions": [],
+      "brazilRef": "CEPEA óleo de soja — requer licenciamento",
+      "fundamentals": {
+        "producers": ["China", "Estados Unidos", "Brasil", "Argentina"],
+        "consumers": ["Índia (importadora)", "China", "Indústria de biodiesel (EUA e Brasil)"],
+        "drivers": ["Mandatos de biodiesel (B14/B15 no Brasil, RFS nos EUA)", "Preço do óleo de palma", "Preço do petróleo"],
+        "seasonality": "Segue o esmagamento.",
+        "weather": "Indireto via safras de soja e palma.",
+        "logistics": "Transporte em tanques; exportação via portos do Sul.",
+        "geopolitics": "Política energética e de biocombustíveis."
+      },
+      "related": { "companies": ["TTEN3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "cacau", "name": { "pt": "Cacau", "en": "Cocoa" }, "category": "agricolas", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Cocoa",
+      "unit": "kg", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Preço diário ICCO, média das 3 primeiras posições em Nova York e Londres — média mensal",
+      "conversions": [{ "label": "US$/t", "factor": 1000 }],
+      "brazilRef": "Preço de amêndoa na Bahia e no Pará (mercado local) — sem integração",
+      "fundamentals": {
+        "producers": ["Costa do Marfim", "Gana", "Equador", "Camarões", "Nigéria", "Brasil"],
+        "consumers": ["União Europeia (moagem)", "Estados Unidos", "Indústria de chocolate global"],
+        "drivers": ["Safra da África Ocidental", "Doenças (swollen shoot)", "Moagem trimestral", "Estoques certificados"],
+        "seasonality": "Safra principal out–mar e temporã mai–ago na África Ocidental.",
+        "weather": "Harmattan e chuvas irregulares na África Ocidental.",
+        "logistics": "Concentração geográfica da oferta amplifica choques.",
+        "geopolitics": "Preços regulados pelos governos de Costa do Marfim e Gana."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "cobre", "name": { "pt": "Cobre", "en": "Copper" }, "category": "metais", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Copper",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Cobre LME grau A, catodos, preço de liquidação — média mensal",
+      "conversions": [{ "label": "US$/lb", "factor": 0.000453592 }],
+      "brazilRef": "Sem referência física pública; contratos indexados à LME + prêmio.",
+      "fundamentals": {
+        "producers": ["Chile", "Peru", "RD Congo", "China", "Estados Unidos"],
+        "consumers": ["China (≈ metade da demanda global)", "União Europeia", "Estados Unidos"],
+        "drivers": ["Construção e infraestrutura na China", "Transição energética (redes, veículos elétricos)", "Interrupções em minas", "Dólar"],
+        "seasonality": "Fraca sazonalidade; estoques chineses sobem após o Ano-Novo Lunar.",
+        "weather": "Escassez hídrica no Chile afeta mineração.",
+        "logistics": "Concentrados exportados para fundições asiáticas.",
+        "geopolitics": "Política mineira no Chile, Peru e RD Congo; tarifas sobre metais."
+      },
+      "related": { "companies": ["VALE3"], "currencies": ["usdclp", "usdbrl", "cnybrl"] }
+    },
+    {
+      "id": "aluminio", "name": { "pt": "Alumínio", "en": "Aluminum" }, "category": "metais", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Aluminum",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Alumínio LME primário, lingotes 99,7%, preço de liquidação — média mensal",
+      "conversions": [],
+      "brazilRef": "Prêmio físico Brasil sobre LME — sem integração",
+      "fundamentals": {
+        "producers": ["China", "Índia", "Rússia", "Canadá", "Emirados Árabes"],
+        "consumers": ["China", "União Europeia", "Estados Unidos"],
+        "drivers": ["Custo de energia (a eletrólise é intensiva em eletricidade)", "Teto de capacidade na China", "Embalagens e transporte", "Sanções à Rússia"],
+        "seasonality": "Baixa.",
+        "weather": "Hidrologia afeta custo de energia de smelters (inclusive no Brasil).",
+        "logistics": "Bauxita e alumina percorrem longas cadeias.",
+        "geopolitics": "Sanções e tarifas sobre alumínio russo e chinês."
+      },
+      "related": { "companies": ["CBAV3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "aco", "name": { "pt": "Aço (laminados)", "en": "Steel" }, "category": "metais", "kind": "processed",
+      "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null,
+      "unit": "índice", "currency": "IDX", "frequency": "monthly",
+      "benchmark": "DEMONSTRAÇÃO — índice base 100. Referências reais (bobina a quente, vergalhão) exigem provedores licenciados (Fastmarkets, S&P Global Platts, Argus).",
+      "conversions": [],
+      "brazilRef": "Preços de distribuidores/usinas — requer provedor licenciado",
+      "fundamentals": {
+        "producers": ["China (mais da metade)", "Índia", "Japão", "Estados Unidos", "Rússia", "Brasil"],
+        "consumers": ["China", "União Europeia", "Índia"],
+        "drivers": ["Minério de ferro e carvão metalúrgico", "Construção civil", "Exportações chinesas (pressão sobre preços globais)", "Medidas antidumping"],
+        "seasonality": "Construção mais fraca no inverno do Hemisfério Norte.",
+        "weather": "Indireto.",
+        "logistics": "Frete de produtos acabados.",
+        "geopolitics": "Tarifas de importação e cotas no Brasil e nos EUA."
+      },
+      "related": { "companies": ["GGBR4", "CSNA3", "USIM5"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "minerio-ferro", "name": { "pt": "Minério de ferro", "en": "Iron ore" }, "category": "metais", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Iron ore, cfr spot",
+      "unit": "dmt", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Minério de ferro finos 62% Fe, spot CFR China — média mensal (US$/tonelada seca)",
+      "conversions": [],
+      "brazilRef": "Preço realizado divulgado pelas mineradoras em relatórios trimestrais",
+      "fundamentals": {
+        "producers": ["Austrália", "Brasil", "China", "Índia"],
+        "consumers": ["China (≈ 70% do comércio marítimo)", "Japão", "Coreia do Sul"],
+        "drivers": ["Produção de aço chinesa", "Estímulo ao setor imobiliário chinês", "Embarques de Austrália e Brasil", "Estoques portuários na China"],
+        "seasonality": "Chuvas reduzem embarques brasileiros no 1º trimestre; ciclones na Austrália.",
+        "weather": "Estação chuvosa em MG/PA; ciclones no oeste da Austrália.",
+        "logistics": "Frete marítimo Brasil–China (Capesize) pesa contra o Brasil frente à Austrália.",
+        "geopolitics": "Política industrial chinesa e limites de produção de aço."
+      },
+      "related": { "companies": ["VALE3", "CSNA3", "USIM5"], "currencies": ["usdbrl", "audusd", "cnybrl"] }
+    },
+    {
+      "id": "zinco", "name": { "pt": "Zinco", "en": "Zinc" }, "category": "metais", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Zinc",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Zinco LME high grade 99,95%, preço de liquidação — média mensal",
+      "conversions": [], "brazilRef": "Sem referência física pública integrada",
+      "fundamentals": {
+        "producers": ["China", "Peru", "Austrália", "Índia"], "consumers": ["China", "União Europeia", "Estados Unidos"],
+        "drivers": ["Galvanização de aço", "Construção e automotivo", "Taxas de tratamento (TCs) em fundições"],
+        "seasonality": "Baixa.", "weather": "Indireto.", "logistics": "Concentrado para fundições asiáticas.", "geopolitics": "Restrições ambientais em fundições chinesas e europeias."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "niquel", "name": { "pt": "Níquel", "en": "Nickel" }, "category": "metais", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Nickel",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Níquel LME catodos 99,8%, preço de liquidação — média mensal",
+      "conversions": [], "brazilRef": "Sem referência física pública integrada",
+      "fundamentals": {
+        "producers": ["Indonésia (dominante)", "Filipinas", "Rússia", "Canadá", "Austrália"], "consumers": ["China (aço inox e baterias)"],
+        "drivers": ["Expansão indonésia de NPI/HPAL", "Aço inoxidável", "Baterias de veículos elétricos"],
+        "seasonality": "Estação chuvosa nas Filipinas reduz embarques de minério.", "weather": "Monções.", "logistics": "Cadeia integrada Indonésia–China.", "geopolitics": "Proibição de exportação de minério bruto pela Indonésia."
+      },
+      "related": { "companies": ["VALE3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "estanho", "name": { "pt": "Estanho", "en": "Tin" }, "category": "metais", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Tin",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Estanho LME refinado 99,85%, preço de liquidação — média mensal",
+      "conversions": [], "brazilRef": "Sem referência física pública integrada",
+      "fundamentals": {
+        "producers": ["China", "Indonésia", "Mianmar", "Peru", "Brasil"], "consumers": ["China", "Indústria eletrônica (soldas)"],
+        "drivers": ["Demanda de semicondutores e eletrônicos", "Oferta de Mianmar (região de Wa)", "Exportações indonésias"],
+        "seasonality": "Baixa.", "weather": "Indireto.", "logistics": "Mercado pequeno e pouco líquido.", "geopolitics": "Conflitos em Mianmar; licenças de exportação na Indonésia."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "ouro", "name": { "pt": "Ouro", "en": "Gold" }, "category": "metais-preciosos", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Gold",
+      "unit": "oz troy", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Ouro spot, média das taxas diárias (desde jun/2025; antes LBMA fixing da tarde) — média mensal",
+      "conversions": [{ "label": "US$/g", "factor": 0.0321507 }],
+      "brazilRef": "Ouro na B3 (contrato à vista OZ1D) — requer licença de market data B3",
+      "fundamentals": {
+        "producers": ["China", "Rússia", "Austrália", "Canadá", "Estados Unidos"], "consumers": ["Bancos centrais", "Joalheria (Índia e China)", "ETFs de ouro"],
+        "drivers": ["Juros reais nos EUA", "Dólar", "Compras de bancos centrais", "Aversão a risco e geopolítica"],
+        "seasonality": "Demanda de joalheria na Índia em festivais e casamentos (2º semestre).", "weather": "Irrelevante.", "logistics": "Irrelevante.", "geopolitics": "Sanções e diversificação de reservas aumentam a demanda oficial."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl", "dxy"] }
+    },
+    {
+      "id": "prata", "name": { "pt": "Prata", "en": "Silver" }, "category": "metais-preciosos", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Silver",
+      "unit": "oz troy", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Prata 99,9% refinada, fixing de Londres — média mensal",
+      "conversions": [], "brazilRef": "Sem referência física integrada",
+      "fundamentals": {
+        "producers": ["México", "China", "Peru", "Chile"], "consumers": ["Indústria (painéis solares, eletrônicos)", "Investimento"],
+        "drivers": ["Demanda fotovoltaica", "Comportamento do ouro", "Atividade industrial"],
+        "seasonality": "Baixa.", "weather": "Irrelevante.", "logistics": "Subproduto de minas de zinco, chumbo e cobre.", "geopolitics": "Política mineira no México e no Peru."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "platina", "name": { "pt": "Platina", "en": "Platinum" }, "category": "metais-preciosos", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Platinum",
+      "unit": "oz troy", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Platina 99,95%, spot média das taxas diárias — média mensal",
+      "conversions": [], "brazilRef": "Sem referência física integrada",
+      "fundamentals": {
+        "producers": ["África do Sul (≈ 70%)", "Rússia", "Zimbábue"], "consumers": ["Catalisadores automotivos", "Joalheria", "Indústria química"],
+        "drivers": ["Produção sul-africana (energia e greves)", "Substituição platina/paládio em catalisadores", "Hidrogênio verde"],
+        "seasonality": "Baixa.", "weather": "Irrelevante.", "logistics": "Concentração geográfica.", "geopolitics": "Sanções à Rússia."
+      },
+      "related": { "companies": [], "currencies": ["usdbrl"] }
+    },
+    { "id": "pet", "name": { "pt": "PET (resina)", "en": "PET" }, "category": "polimeros", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Preços reais de resinas exigem provedores licenciados (ICIS, S&P Global Commodity Insights, Argus).", "conversions": [], "brazilRef": "Preços de distribuidores de resinas — requer licença", "fundamentals": { "producers": ["China", "Estados Unidos", "Índia", "Sudeste Asiático"], "consumers": ["Embalagens de bebidas", "Têxtil (poliéster)"], "drivers": ["Paraxileno e MEG (derivados de petróleo)", "Demanda de embalagens", "Reciclagem (rPET)"], "seasonality": "Pico de demanda de garrafas no verão.", "weather": "Indireto via consumo de bebidas.", "logistics": "Importações asiáticas competem com a produção local.", "geopolitics": "Antidumping sobre resinas importadas." }, "related": { "companies": [], "currencies": ["usdbrl"] } },
+    { "id": "pvc", "name": { "pt": "PVC", "en": "PVC" }, "category": "polimeros", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["China", "Estados Unidos", "União Europeia"], "consumers": ["Construção civil (tubos, perfis)"], "drivers": ["Construção civil", "Soda cáustica (coproduto do cloro)", "Etileno e energia"], "seasonality": "Construção mais forte no 2º semestre no Brasil.", "weather": "Indireto.", "logistics": "Importação marítima.", "geopolitics": "Medidas antidumping." }, "related": { "companies": [], "currencies": ["usdbrl"] } },
+    { "id": "abs", "name": { "pt": "ABS", "en": "ABS" }, "category": "polimeros", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["China", "Coreia do Sul", "Taiwan"], "consumers": ["Eletrodomésticos", "Automotivo", "Eletrônicos"], "drivers": ["Butadieno, estireno e acrilonitrila", "Produção de eletrodomésticos e veículos"], "seasonality": "Baixa.", "weather": "Indireto.", "logistics": "Majoritariamente importado no Brasil.", "geopolitics": "Tarifas e fretes Ásia–Brasil." }, "related": { "companies": [], "currencies": ["usdbrl", "cnybrl"] } },
+    { "id": "pp", "name": { "pt": "Polipropileno (PP)", "en": "Polypropylene" }, "category": "polimeros", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["China", "Oriente Médio", "Estados Unidos", "Brasil"], "consumers": ["Embalagens", "Automotivo", "Bens de consumo"], "drivers": ["Propeno (nafta ou gás)", "Demanda de embalagens", "Capacidade nova na China"], "seasonality": "Baixa.", "weather": "Furacões no Golfo dos EUA afetam a oferta.", "logistics": "Importação marítima.", "geopolitics": "Antidumping." }, "related": { "companies": [], "currencies": ["usdbrl"] } },
+    { "id": "pead", "name": { "pt": "PEAD (HDPE)", "en": "HDPE" }, "category": "polimeros", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["Estados Unidos (gás de xisto)", "Oriente Médio", "China"], "consumers": ["Embalagens rígidas", "Tubos"], "drivers": ["Eteno (etano ou nafta)", "Exportações dos EUA"], "seasonality": "Baixa.", "weather": "Furacões no Golfo dos EUA.", "logistics": "Importação marítima.", "geopolitics": "Tarifas." }, "related": { "companies": [], "currencies": ["usdbrl"] } },
+    { "id": "pebd", "name": { "pt": "PEBD (LDPE)", "en": "LDPE" }, "category": "polimeros", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["Estados Unidos", "Oriente Médio", "União Europeia"], "consumers": ["Filmes flexíveis", "Embalagens"], "drivers": ["Eteno", "Demanda de embalagens flexíveis"], "seasonality": "Baixa.", "weather": "Indireto.", "logistics": "Importação marítima.", "geopolitics": "Tarifas." }, "related": { "companies": [], "currencies": ["usdbrl"] } },
+    { "id": "glicerina", "name": { "pt": "Glicerina", "en": "Glycerin" }, "category": "quimicos", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado (ICIS, Argus).", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["Coproduto do biodiesel (Brasil, UE, Sudeste Asiático)"], "consumers": ["Farmacêutica", "Cosméticos", "Alimentos", "Ração"], "drivers": ["Volume de biodiesel produzido", "Mandatos de mistura"], "seasonality": "Segue a produção de biodiesel.", "weather": "Indireto.", "logistics": "Glicerina bruta versus refinada (USP).", "geopolitics": "Política de biocombustíveis." }, "related": { "companies": [], "currencies": ["usdbrl"] } },
+    { "id": "acido-citrico", "name": { "pt": "Ácido cítrico", "en": "Citric acid" }, "category": "quimicos", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["China (dominante)"], "consumers": ["Bebidas", "Alimentos", "Detergentes"], "drivers": ["Custo de açúcar e milho (fermentação)", "Exportações chinesas"], "seasonality": "Baixa.", "weather": "Indireto.", "logistics": "Importado da Ásia.", "geopolitics": "Antidumping." }, "related": { "companies": [], "currencies": ["usdbrl", "cnybrl"] } },
+    { "id": "soda-caustica", "name": { "pt": "Soda cáustica", "en": "Caustic soda" }, "category": "quimicos", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["Estados Unidos", "China", "União Europeia"], "consumers": ["Celulose", "Alumina", "Química"], "drivers": ["Demanda de cloro (PVC) — coproduto", "Energia elétrica", "Demanda de alumina e celulose"], "seasonality": "Baixa.", "weather": "Indireto.", "logistics": "Importação líquida no Brasil.", "geopolitics": "Tarifas." }, "related": { "companies": ["SUZB3", "KLBN11", "CBAV3"], "currencies": ["usdbrl"] } },
+    { "id": "amido-industrial", "name": { "pt": "Amido industrial", "en": "Industrial starch" }, "category": "quimicos", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Requer licença", "fundamentals": { "producers": ["Processadores de milho e mandioca"], "consumers": ["Papel e papelão", "Alimentos", "Têxtil"], "drivers": ["Preços de milho e mandioca", "Demanda de papel ondulado"], "seasonality": "Segue as safras de milho e mandioca.", "weather": "Indireto.", "logistics": "Regional.", "geopolitics": "Baixa." }, "related": { "companies": ["KLBN11"], "currencies": ["usdbrl"] } },
+    {
+      "id": "ureia", "name": { "pt": "Ureia", "en": "Urea" }, "category": "quimicos", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Urea",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Ureia granulada (prill) spot FOB Oriente Médio (desde mar/2022; antes Mar Negro) — média mensal",
+      "conversions": [], "brazilRef": "Preço CFR Brasil — requer provedor licenciado",
+      "fundamentals": {
+        "producers": ["China", "Índia", "Rússia", "Oriente Médio"], "consumers": ["Índia", "Brasil (grande importador)", "Estados Unidos"],
+        "drivers": ["Gás natural (principal custo)", "Licitações indianas", "Exportações chinesas"],
+        "seasonality": "Importações brasileiras antecedem o plantio de verão e de milho.", "weather": "Indireto.", "logistics": "O Brasil importa a maior parte do nitrogênio que consome.", "geopolitics": "Sanções à Rússia; restrições de exportação na China."
+      },
+      "related": { "companies": ["SLCE3", "TTEN3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "dap", "name": { "pt": "DAP (fosfato diamônico)", "en": "DAP" }, "category": "quimicos", "kind": "processed",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "DAP",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "DAP spot FOB Golfo dos EUA — média mensal",
+      "conversions": [], "brazilRef": "Preço CFR Brasil (MAP é mais usado no Brasil) — requer provedor licenciado",
+      "fundamentals": {
+        "producers": ["China", "Marrocos", "Estados Unidos", "Rússia"], "consumers": ["Índia", "Brasil", "Estados Unidos"],
+        "drivers": ["Rocha fosfática e enxofre", "Cotas de exportação chinesas"],
+        "seasonality": "Compras antes do plantio.", "weather": "Indireto.", "logistics": "Importação marítima.", "geopolitics": "Restrições chinesas."
+      },
+      "related": { "companies": ["SLCE3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "kcl", "name": { "pt": "Cloreto de potássio (KCl)", "en": "Potassium chloride" }, "category": "quimicos", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Potassium chloride",
+      "unit": "t", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Cloreto de potássio granulado, spot CFR Brasil (desde jan/2020; antes FOB Vancouver) — média mensal",
+      "conversions": [], "brazilRef": "Este benchmark já é CFR Brasil (granulado)",
+      "fundamentals": {
+        "producers": ["Canadá", "Rússia", "Belarus", "China"], "consumers": ["Brasil (maior importador)", "China", "Estados Unidos", "Índia"],
+        "drivers": ["Oferta de Canadá, Rússia e Belarus", "Demanda de soja e cana no Brasil", "Contratos anuais China/Índia"],
+        "seasonality": "Pico de importação brasileira no 2º e 3º trimestres.", "weather": "Indireto.", "logistics": "Portos de Paranaguá e Santos; armazenagem.", "geopolitics": "Sanções a Belarus e Rússia."
+      },
+      "related": { "companies": ["SLCE3", "AGRO3"], "currencies": ["usdbrl"] }
+    },
+    { "id": "celulose-fibra-curta", "name": { "pt": "Celulose fibra curta (BHKP)", "en": "Hardwood pulp" }, "category": "papel-celulose", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Preços reais (BHKP China/Europa) exigem licença FOEX/Fastmarkets RISI; preços de lista das produtoras são divulgados em relatórios.", "conversions": [], "brazilRef": "Preço líquido realizado divulgado pelas produtoras em relatórios trimestrais", "fundamentals": { "producers": ["Brasil (maior exportador de eucalipto)", "Chile", "Uruguai", "Indonésia"], "consumers": ["China", "Europa", "América do Norte"], "drivers": ["Demanda chinesa de papel tissue e imprimir", "Novas capacidades (Brasil, Uruguai)", "Câmbio BRL (custos em reais, receita em dólar)", "Estoques nos portos europeus e chineses"], "seasonality": "Paradas de manutenção concentradas no 2º e 3º trimestres.", "weather": "Seca e geada afetam florestas de eucalipto.", "logistics": "Exportação via terminais dedicados (Santos, Portocel, Rio Grande).", "geopolitics": "Tarifas e demanda chinesa." }, "related": { "companies": ["SUZB3", "KLBN11"], "currencies": ["usdbrl", "cnybrl"] } },
+    { "id": "celulose-fibra-longa", "name": { "pt": "Celulose fibra longa (NBSK)", "en": "Softwood pulp" }, "category": "papel-celulose", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer licença FOEX/Fastmarkets RISI.", "conversions": [], "brazilRef": "O Brasil produz fibra longa em menor escala (pinus, PR/SC)", "fundamentals": { "producers": ["Canadá", "Escandinávia", "Estados Unidos", "Rússia", "Chile"], "consumers": ["China", "Europa"], "drivers": ["Oferta canadense (incêndios, greves)", "Spread em relação à fibra curta"], "seasonality": "Paradas de manutenção.", "weather": "Incêndios florestais no Canadá.", "logistics": "Ferrovias e portos canadenses.", "geopolitics": "Sanções à Rússia." }, "related": { "companies": ["KLBN11"], "currencies": ["usdbrl"] } },
+    { "id": "papel-kraft", "name": { "pt": "Papel kraft / kraftliner", "en": "Kraft paper" }, "category": "papel-celulose", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado.", "conversions": [], "brazilRef": "Expedição de papelão ondulado (Empapel) é um indicador de demanda — sem integração", "fundamentals": { "producers": ["Estados Unidos", "Brasil", "Europa"], "consumers": ["Embalagens de papelão ondulado"], "drivers": ["Atividade industrial e comércio eletrônico", "Exportações de proteína e frutas (caixas)", "Custo de fibra e energia"], "seasonality": "Pico no 2º semestre (varejo).", "weather": "Indireto.", "logistics": "Mercado regional.", "geopolitics": "Baixa." }, "related": { "companies": ["KLBN11", "SUZB3"], "currencies": ["usdbrl"] } },
+    { "id": "papel-reciclado", "name": { "pt": "Papel reciclado (aparas OCC)", "en": "Recycled paper" }, "category": "papel-celulose", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Requer provedor licenciado ou pesquisa própria.", "conversions": [], "brazilRef": "Preços de aparas por região — sem fonte pública integrada", "fundamentals": { "producers": ["Coleta urbana e industrial"], "consumers": ["Fábricas de papel reciclado"], "drivers": ["Consumo de embalagens", "Demanda de fibra reciclada versus virgem"], "seasonality": "Segue o consumo.", "weather": "Indireto.", "logistics": "Cadeia regional de coleta.", "geopolitics": "Restrições chinesas à importação de aparas." }, "related": { "companies": ["KLBN11"], "currencies": ["usdbrl"] } },
+    {
+      "id": "madeira", "name": { "pt": "Madeira em tora (tropical)", "en": "Wood (logs)" }, "category": "papel-celulose", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Logs, Malaysian",
+      "unit": "m³", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Toras de meranti (Sarawak), preço de venda de importadores em Tóquio — média mensal. ATENÇÃO: referência de madeira tropical asiática, não representa eucalipto ou pinus plantados no Brasil.",
+      "conversions": [], "brazilRef": "Preços de eucalipto/pinus em pé — sem fonte pública integrada",
+      "fundamentals": {
+        "producers": ["Malásia", "Indonésia", "Papua-Nova Guiné"], "consumers": ["Japão", "China", "Índia"],
+        "drivers": ["Construção no Japão e na China", "Restrições de exploração florestal"],
+        "seasonality": "Monções afetam a exploração.", "weather": "Monções.", "logistics": "Frete marítimo regional.", "geopolitics": "Regulação ambiental (EUDR)."
+      },
+      "related": { "companies": ["KLBN11", "SUZB3"], "currencies": ["usdbrl"] }
+    },
+    {
+      "id": "brent", "name": { "pt": "Petróleo Brent", "en": "Brent crude" }, "category": "energia", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Crude oil, Brent",
+      "unit": "bbl", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Petróleo Brent (Reino Unido) 38° API, spot — média mensal",
+      "conversions": [], "brazilRef": "Referência para a política de preços de combustíveis no Brasil (paridade de importação)",
+      "fundamentals": {
+        "producers": ["Estados Unidos", "Arábia Saudita", "Rússia", "Canadá", "Brasil"], "consumers": ["Estados Unidos", "China", "Índia", "União Europeia"],
+        "drivers": ["Política da OPEP+", "Produção de xisto nos EUA", "Demanda chinesa", "Estoques da OCDE", "Prêmio geopolítico"],
+        "seasonality": "Demanda de gasolina no verão do Hemisfério Norte.", "weather": "Furacões no Golfo do México.", "logistics": "Rotas por Hormuz, Mar Vermelho e Bósforo.", "geopolitics": "Conflitos no Oriente Médio e sanções a Rússia e Irã."
+      },
+      "related": { "companies": ["PETR4", "PETR3"], "currencies": ["usdbrl", "usdnok", "usdcad"] }
+    },
+    {
+      "id": "wti", "name": { "pt": "Petróleo WTI", "en": "WTI crude" }, "category": "energia", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Crude oil, WTI",
+      "unit": "bbl", "currency": "USD", "frequency": "monthly",
+      "benchmark": "West Texas Intermediate 40° API, spot — média mensal",
+      "conversions": [], "brazilRef": "—",
+      "fundamentals": {
+        "producers": ["Estados Unidos"], "consumers": ["Refinarias dos EUA", "Exportação"],
+        "drivers": ["Estoques em Cushing", "Produção de xisto", "Spread Brent–WTI"],
+        "seasonality": "Driving season (mai–set).", "weather": "Furacões.", "logistics": "Oleodutos para o Golfo.", "geopolitics": "Política energética dos EUA."
+      },
+      "related": { "companies": ["PETR4"], "currencies": ["usdcad"] }
+    },
+    {
+      "id": "gas-natural", "name": { "pt": "Gás natural (Henry Hub)", "en": "Natural gas (US)" }, "category": "energia", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Natural gas, US",
+      "unit": "MMBtu", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Gás natural spot no Henry Hub, Louisiana — média mensal",
+      "conversions": [], "brazilRef": "Preço do gás no Brasil é regulado/contratual — sem integração",
+      "fundamentals": {
+        "producers": ["Estados Unidos", "Rússia", "Irã", "Catar"], "consumers": ["Estados Unidos", "União Europeia", "China"],
+        "drivers": ["Clima (aquecimento e refrigeração)", "Exportações de GNL", "Estoques semanais (EIA)"],
+        "seasonality": "Forte: picos no inverno do Hemisfério Norte.", "weather": "Ondas de frio e calor.", "logistics": "Capacidade de liquefação.", "geopolitics": "Dependência europeia do GNL."
+      },
+      "related": { "companies": ["PETR4"], "currencies": ["usdnok"] }
+    },
+    {
+      "id": "gas-natural-eu", "name": { "pt": "Gás natural (Europa TTF)", "en": "Natural gas (Europe)" }, "category": "energia", "kind": "raw",
+      "priceType": "international_benchmark", "dataMode": "real", "provider": "worldbank_pinksheet", "providerSeries": "Natural gas, Europe",
+      "unit": "MMBtu", "currency": "USD", "frequency": "monthly",
+      "benchmark": "Gás natural na Europa — Netherlands TTF (desde abr/2015) — média mensal",
+      "conversions": [], "brazilRef": "—",
+      "fundamentals": {
+        "producers": ["Noruega", "GNL dos EUA e do Catar"], "consumers": ["União Europeia"],
+        "drivers": ["Níveis de armazenagem europeus", "Importações de GNL", "Clima", "Fluxos da Noruega"],
+        "seasonality": "Forte (inverno).", "weather": "Frio, vento e geração renovável.", "logistics": "Terminais de regaseificação.", "geopolitics": "Corte do gás russo."
+      },
+      "related": { "companies": [], "currencies": ["usdnok", "eurbrl"] }
+    },
+    { "id": "etanol", "name": { "pt": "Etanol hidratado", "en": "Ethanol" }, "category": "energia", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Referências reais: CEPEA/ESALQ (requer licenciamento) e preços ao consumidor da ANP (dados abertos — integração planejada).", "conversions": [], "brazilRef": "Indicador CEPEA etanol hidratado SP; ANP Levantamento de Preços", "fundamentals": { "producers": ["Estados Unidos (milho)", "Brasil (cana e milho)"], "consumers": ["Frota flex brasileira", "Mistura obrigatória na gasolina (E27/E30)"], "drivers": ["Preço da gasolina (paridade de 70%)", "Mix das usinas", "Etanol de milho no Centro-Oeste", "Tributação (PIS/Cofins, ICMS)"], "seasonality": "Preços mais baixos no pico da safra (mai–set).", "weather": "Safra de cana.", "logistics": "Distribuição por dutos e rodovias.", "geopolitics": "Política de preços da Petrobras." }, "related": { "companies": ["SMTO3", "JALL3"], "currencies": ["usdbrl"] } },
+    { "id": "diesel", "name": { "pt": "Diesel S10", "en": "Diesel" }, "category": "energia", "kind": "processed", "priceType": "regional_physical", "dataMode": "demo", "provider": "demo", "providerSeries": null, "unit": "índice", "currency": "IDX", "frequency": "monthly", "benchmark": "DEMONSTRAÇÃO — índice base 100. Referência real: ANP Levantamento de Preços de Combustíveis (dados abertos — integração planejada, host não liberado nesta implantação).", "conversions": [], "brazilRef": "ANP — preço médio de revenda semanal", "fundamentals": { "producers": ["Refinarias (Petrobras e privadas)", "Importadores (EUA, Rússia)"], "consumers": ["Transporte rodoviário de cargas", "Agronegócio"], "drivers": ["Brent e crack spread do diesel", "Câmbio", "Política de preços da Petrobras", "Tributos"], "seasonality": "Demanda maior na safra de grãos.", "weather": "Indireto.", "logistics": "O Brasil importa parcela relevante do diesel consumido.", "geopolitics": "Sanções sobre produtos russos." }, "related": { "companies": ["PETR4", "PETR3"], "currencies": ["usdbrl"] } }
+  ],
+  "currencies": [
+    { "id": "usdbrl", "name": { "pt": "Dólar / Real", "en": "USD/BRL" }, "pair": "USD/BRL", "dataMode": "real", "provider": "bcb_ptax", "unitLabel": "R$ por US$", "description": "PTAX de fechamento (venda) do Banco Central do Brasil.", "commodityLink": "O real costuma oscilar junto com preços de commodities exportadas (soja, minério, petróleo) e com o diferencial de juros (carry). Exportadores recebem mais reais quando o dólar sobe; importadores de insumos pagam mais. A relação não é estável: choques fiscais e de risco-país podem dominar." },
+    { "id": "eurbrl", "name": { "pt": "Euro / Real", "en": "EUR/BRL" }, "pair": "EUR/BRL", "dataMode": "real", "provider": "bcb_ptax", "unitLabel": "R$ por €", "description": "PTAX de fechamento (venda) do Banco Central do Brasil.", "commodityLink": "Relevante para importação de máquinas e químicos europeus e para exportações agrícolas à UE." },
+    { "id": "cnybrl", "name": { "pt": "Yuan / Real", "en": "CNY/BRL" }, "pair": "CNY/BRL", "dataMode": "real", "provider": "ecb_cross", "unitLabel": "R$ por ¥", "description": "Taxa cruzada calculada a partir das taxas de referência do BCE (BRL/EUR ÷ CNY/EUR). Não é cotação negociada.", "commodityLink": "A China é a principal compradora de soja, minério de ferro, celulose e petróleo brasileiros. A atividade chinesa influencia preços dessas commodities." },
+    { "id": "audusd", "name": { "pt": "Dólar australiano / Dólar", "en": "AUD/USD" }, "pair": "AUD/USD", "dataMode": "real", "provider": "ecb_cross", "unitLabel": "US$ por A$", "description": "Taxa cruzada a partir das taxas de referência do BCE.", "commodityLink": "Moeda historicamente associada ao minério de ferro e ao carvão (Austrália é grande exportadora) e à demanda chinesa." },
+    { "id": "usdcad", "name": { "pt": "Dólar / Dólar canadense", "en": "USD/CAD" }, "pair": "USD/CAD", "dataMode": "real", "provider": "ecb_cross", "unitLabel": "C$ por US$", "description": "Taxa cruzada a partir das taxas de referência do BCE.", "commodityLink": "O Canadá exporta petróleo, potássio e madeira; o CAD tende a se apreciar (USD/CAD cai) com petróleo em alta, mas a relação varia no tempo." },
+    { "id": "usdclp", "name": { "pt": "Dólar / Peso chileno", "en": "USD/CLP" }, "pair": "USD/CLP", "dataMode": "unavailable", "provider": "none", "unitLabel": "CLP por US$", "description": "Indisponível: nem o BCB (PTAX) nem o BCE publicam CLP. Integração planejada via Banco Central de Chile (API com credenciais).", "commodityLink": "O Chile é o maior produtor de cobre; o peso chileno é sensível ao preço do cobre." },
+    { "id": "usdnok", "name": { "pt": "Dólar / Coroa norueguesa", "en": "USD/NOK" }, "pair": "USD/NOK", "dataMode": "real", "provider": "ecb_cross", "unitLabel": "NOK por US$", "description": "Taxa cruzada a partir das taxas de referência do BCE.", "commodityLink": "A Noruega exporta petróleo e gás; a coroa costuma refletir preços de energia e o diferencial de juros." },
+    { "id": "dxy", "name": { "pt": "Índice do dólar (réplica)", "en": "Dollar index (replica)" }, "pair": "USD Index", "dataMode": "real", "provider": "ecb_dxy_replica", "unitLabel": "pontos", "description": "Réplica calculada pela Avermont com a fórmula pública do índice do dólar (cesta EUR, JPY, GBP, CAD, SEK, CHF) usando taxas de referência do BCE. NÃO é o índice oficial ICE (DXY®), que exige licença.", "commodityLink": "Commodities cotadas em dólar tendem a ficar mais caras para o resto do mundo quando o dólar se fortalece, o que pode pressionar a demanda. A correlação é instável." }
+  ]
+}

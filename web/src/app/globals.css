@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Paleta Avermont — tokens semânticos (modo escuro é o padrão; .light redefine) */
+:root,
+.dark {
+  --bg: #0b1423;
+  --bg-2: #0e1a2d;
+  --panel: #111f36;
+  --panel-2: #15253f;
+  --border: #1f3050;
+  --border-strong: #2b4168;
+  --text: #e8eef8;
+  --text-2: #b6c3d8;
+  --muted: #8193b0;
+  --brand: #10b981;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --gold: #f59e0b;
+  --cyan: #06b6d4;
+  --red: #ef4444;
+  --up: #10b981;
+  --down: #ef4444;
+  --up-bg: rgba(16, 185, 129, 0.12);
+  --down-bg: rgba(239, 68, 68, 0.12);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
+}
+
+.light {
+  --bg: #f4f7fb;
+  --bg-2: #eef2f8;
+  --panel: #ffffff;
+  --panel-2: #f7f9fc;
+  --border: #e1e7f0;
+  --border-strong: #c9d3e2;
+  --text: #0b1423;
+  --text-2: #33425c;
+  --muted: #5d6d88;
+  --up: #059669;
+  --down: #dc2626;
+  --up-bg: rgba(5, 150, 105, 0.1);
+  --down-bg: rgba(220, 38, 38, 0.08);
+  --shadow: 0 1px 2px rgba(11, 20, 35, 0.06), 0 6px 18px rgba(11, 20, 35, 0.06);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--text);
+  --color-fg-2: var(--text-2);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-blue: var(--blue);
+  --color-purple: var(--purple);
+  --color-gold: var(--gold);
+  --color-cyan: var(--cyan);
+  --color-coral: var(--red);
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.bg-grid {
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Tabelas financeiras densas */
+.fin-table th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.fin-table td,
+.fin-table th {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.fin-table tbody tr:hover {
+  background: var(--panel-2);
+}
+
+/* Animações sutis */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-ticker {
+  animation: ticker 60s linear infinite;
+}
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-ticker {
+    animation: none;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+}
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
