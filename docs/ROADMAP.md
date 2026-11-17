@@ -11,9 +11,9 @@ Landing page, navegação completa, painel de mercados, categorias, páginas de 
 - [x] Correlações históricas com IC e estabilidade
 - [x] Resumo diário e notas de mercado geradas a partir dos dados
 - [x] Extração de cotações por IA, com verificação humana obrigatória
-- [ ] Edição mais recente do Pink Sheet (liberar `www.worldbank.org` ou atualizar a URL)
+- [x] Edição mais recente do Pink Sheet (descoberta automática da URL)
 - [ ] ITR trimestral, releases e EBITDA ajustado
-- [ ] Carteiras de fundos (CDA) para exposição verificada
+- [x] Carteiras de fundos (CDA) para exposição verificada
 - [ ] Feeds de notícias autorizados
 - [ ] Conab, IBGE, Comex Stat, USDA PSD/WASDE, ANP, EIA
 
@@ -31,10 +31,10 @@ Mais mercados, fornecedores regionais, integrações autorizadas (e-mail e Whats
 
 ## Limitações conhecidas
 
-1. **Commodities até dez/2025:** a URL da edição atual do Pink Sheet não pôde ser descoberta (`www.worldbank.org` bloqueado na rede desta sessão). As séries aparecem como "Desatualizado" e as previsões de curto prazo como "expiradas".
+1. **Pink Sheet é mensal:** o Banco Mundial publica no início de cada mês a média do mês anterior. O mês corrente nunca aparece, e a série mais curta (sorgo) foi descontinuada pela fonte em 2020.
 2. **Sem cotações de ações, ETFs ou futuros:** dependem de licença B3/CME/ICE/LME. Valor de mercado, múltiplos e correlação ação × commodity não são exibidos.
 3. **Polímeros, químicos, celulose, papéis, aço, etanol e diesel** são demonstrativos (índice base 100) até a contratação de provedores.
-4. **Exposição de fundos inferida do nome e da classe CVM**, sem análise da carteira. O simulador não gera números para fundos.
+4. **Carteira de fundos (CDA)** tem defasagem de até 90 dias, omite posições confidenciais, mostra futuros só com a direção e não informa hedge cambial. O simulador estima só a parte direta da carteira; fundos sem CDA recente continuam com exposição inferida do nome.
 5. **CSNA3** não consta no FCA da CVM (o registro traz o código "4030") e permanece sinalizado.
 6. **IA:** o caminho com LLM (chat e extração de PDF/imagem) foi implementado conforme o SDK oficial, mas **não foi testado ao vivo** nesta sessão (sem chave de API disponível). O modo sem LLM foi testado.
 7. **Inglês** cobre a navegação e os rótulos principais; o conteúdo analítico está em português.

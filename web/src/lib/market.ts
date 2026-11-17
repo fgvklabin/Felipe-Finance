@@ -113,6 +113,15 @@ export interface Fund {
     volatility12m: number | null; maxDrawdown12m: number | null; observations: number; weekly: [string, number][];
   };
   documents: null | Record<string, string>;
+  holdings?: FundHoldings | null;
+}
+
+export interface FundExposureEntry { weight: number | null; via: string[]; byVia: Record<string, number>; side: "long" | "short"; weighted: boolean }
+export interface FundHoldings {
+  month: string; pl: number; confidentialShare: number; positions: number;
+  top: { label: string; type: string; weight: number }[];
+  futures: { label: string; side: "long" | "short"; commodities: string[] }[];
+  exposures: Record<string, FundExposureEntry>;
 }
 
 export interface Correlations {

@@ -55,6 +55,12 @@ export function fmtMonth(iso: string | null | undefined, l: Locale = "pt"): stri
   return fmtDate(iso, l, { month: "short", year: "numeric", timeZone: "UTC" });
 }
 
+/** Alvo de uma previsão: séries mensais preveem a MÉDIA do mês, não um dia. */
+export function fmtTarget(iso: string | null | undefined, frequency: string | undefined, l: Locale = "pt"): string {
+  if (!iso) return "—";
+  return frequency === "monthly" ? `${l === "pt" ? "média de" : "average of"} ${fmtMonth(iso, l)}` : fmtDate(iso, l);
+}
+
 export function fmtDateTime(iso: string | null | undefined, l: Locale = "pt"): string {
   return fmtDate(iso, l, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
 }

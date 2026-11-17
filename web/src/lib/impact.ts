@@ -53,7 +53,7 @@ export const IMPACT_LINKS: ImpactLink[] = [
       { target: "Fundos com exposição a ações sucroalcooleiras", targetType: "fund_type", direction: "mixed", channel: "Indireta, via ações — depende da carteira" },
     ],
     counterfactors: ["Fixações de preço e hedge (vendas antecipadas)", "Custos de cana e diesel", "Política de exportação da Índia", "Câmbio"],
-    uncertainty: "média", limitations: "Efeito em fundos só pode ser estimado com carteira divulgada (CDA).",
+    uncertainty: "média", limitations: "Efeito em fundos só é estimado quando há carteira divulgada (CDA) — veja a página de cada fundo.",
     correlationWith: ["usdbrl", "brent"], sources: ["World Bank Pink Sheet", "DFP/CVM"],
   },
   {
@@ -152,7 +152,7 @@ export const IMPACT_LINKS: ImpactLink[] = [
       { target: "Fundos multimercado com ouro", targetType: "fund_type", direction: "mixed", channel: "Depende de posição e hedge" },
     ],
     counterfactors: ["Dólar mais forte", "Juros reais em alta", "Real apreciado reduz o retorno em reais"],
-    uncertainty: "média", limitations: "Posições de multimercados não são verificadas sem a carteira (CDA).",
+    uncertainty: "média", limitations: "Multimercados: a carteira (CDA) mostra os ativos, mas futuros aparecem só com a direção e o hedge cambial não é informado.",
     correlationWith: ["dxy", "usdbrl", "prata"], sources: ["World Bank Pink Sheet", "CVM (cadastro de fundos)"],
   },
 ];

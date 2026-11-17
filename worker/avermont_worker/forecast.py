@@ -356,7 +356,9 @@ def forecast_series(s: SeriesInput, today: date | None = None, n_eval: int | Non
             if years < 15 or coverage is None or not (0.65 <= coverage <= 0.95) or len(eval_origins) < 12:
                 entry.update(status="not_justified", message=INSUFFICIENT_MSG,
                              reason=f"12 meses exige ≥15 anos de histórico e cobertura de intervalo entre 65% e 95% (histórico {years:.1f} anos; cobertura {coverage if coverage is None else round(coverage, 2)})")
-        if entry["status"] == "ok" and target_date < today.isoformat():
+        # Série mensal prevê a MÉDIA do mês-alvo: só expira depois que esse mês termina.
+        expiry = _add_horizon(target_date, "monthly", 1, 0) if monthly else target_date
+        if entry["status"] == "ok" and expiry <= today.isoformat():
             entry.update(status="expired", message="Horizonte já transcorrido: a fonte não publicou dados mais recentes. A previsão fica arquivada, mas não deve ser usada.")
         result["horizons"][label] = entry
 

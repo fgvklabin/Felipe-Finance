@@ -2,6 +2,7 @@ import "server-only";
 import { COMPANY_KB } from "./companies-kb";
 import { IMPACT_LINKS } from "./impact";
 import { getCompanies, getFunds, type CvmCompany, type Fund } from "./market";
+import { exposureFor, nameSuggests, type FundExposure } from "./fund-exposure";
 
 // Quem tende a se beneficiar de uma ALTA no preço de cada commodity (efeito de primeira ordem).
 // Não é recomendação: o efeito líquido depende de hedge, câmbio, custos, volumes e expectativas já precificadas.
@@ -16,23 +17,12 @@ export const EXPOSURE_LABEL: Record<string, { label: string; tone: "green" | "bl
   multimercado_nao_verificada: { label: "Multimercado (não verificada)", tone: "gold" },
 };
 
-// Temas de fundos (inferidos do nome/classe CVM) → commodities cuja alta os afeta diretamente.
-const TAG_TO_COMMODITIES: Record<string, string[]> = {
-  ouro: ["ouro"],
-  petroleo: ["brent", "wti"],
-  energia: ["brent", "wti", "gas-natural", "gas-natural-eu"],
-  acucar: ["acucar"],
-  cafe: ["cafe-arabica", "cafe-robusta"],
-  metais: ["minerio-ferro", "cobre", "aluminio", "zinco", "niquel", "estanho", "aco", "prata", "platina"],
-  agro: ["soja", "milho", "trigo", "algodao", "farelo-soja", "oleo-soja", "acucar", "cafe-arabica", "cafe-robusta", "sorgo"],
-};
-
 export interface StockBeneficiary {
   ticker: string; tickers: string[]; name: string; sector: string | null; strength: "direta" | "mista";
   channels: string[]; offsets: string[]; company: CvmCompany | null;
 }
 
-export interface FundBeneficiary { fund: Fund; basis: "direta" | "indireta" | "nao_verificada"; matchedTags: string[] }
+export interface FundBeneficiary { fund: Fund; exposure: FundExposure; matchedTags: string[] }
 
 export function stocksFor(commodityId: string): StockBeneficiary[] {
   const map = new Map<string, StockBeneficiary>();
@@ -72,17 +62,19 @@ export function stocksFor(commodityId: string): StockBeneficiary[] {
 export function fundsFor(commodityId: string): FundBeneficiary[] {
   const out: FundBeneficiary[] = [];
   for (const f of getFunds().funds) {
-    const matched = f.tags.filter((t) => TAG_TO_COMMODITIES[t]?.includes(commodityId));
-    if (!matched.length) continue;
-    // Fiagros (crédito/imóveis) e fundos cambiais não têm exposição direta ao preço da commodity: ficam de fora.
-    if (f.vehicle === "fiagro" || f.vehicle === "cambial") continue;
-    const basis = f.vehicle === "etf" ? "direta" : f.vehicle === "acoes" ? "indireta" : "nao_verificada";
-    out.push({ fund: f, basis, matchedTags: matched });
+    const exposure = exposureFor(f, commodityId);
+    if (!exposure) continue;
+    out.push({ fund: f, exposure, matchedTags: f.tags.filter((t) => TAG_LABEL[t]) });
   }
-  const rank = { direta: 0, indireta: 1, nao_verificada: 2 } as const;
-  return out.sort((a, b) => rank[a.basis] - rank[b.basis] || b.fund.netAssets - a.fund.netAssets);
+  const rank: Record<string, number> = { carteira: 0, derivativos: 1, nome_indice: 2, nome_acoes: 3, nao_verificada: 4 };
+  return out.sort((a, b) => rank[a.exposure.basis] - rank[b.exposure.basis] || (b.exposure.weight ?? 0) - (a.exposure.weight ?? 0) || b.fund.netAssets - a.fund.netAssets);
+}
+
+/** Fundos cujo nome sugere a commodity, mas cuja carteira divulgada não mostra exposição relevante. */
+export function nameOnlyFunds(commodityId: string): Fund[] {
+  return getFunds().funds.filter((f) => f.holdings && nameSuggests(f, commodityId) && !exposureFor(f, commodityId));
 }
 
 export function beneficiaryCounts(commodityId: string) {
-  return { stocks: stocksFor(commodityId).length, funds: fundsFor(commodityId).filter((f) => f.basis !== "nao_verificada").length };
+  return { stocks: stocksFor(commodityId).length, funds: fundsFor(commodityId).filter((f) => f.exposure.basis !== "nao_verificada").length };
 }

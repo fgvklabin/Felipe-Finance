@@ -22,7 +22,15 @@ export function marketView(): MarketView {
       return c?.financials.at(-1)?.fiscalYear ?? null;
     },
     fundExposure(cnpj) {
-      return findFund(cnpj)?.exposureType ?? null;
+      const f = findFund(cnpj);
+      if (!f) return null;
+      if (!f.holdings) return f.exposureType;
+      // Assinatura: commodities com ≥5% da carteira e direção dos futuros (muda quando o fundo entra/sai de um tema)
+      const sig = Object.entries(f.holdings.exposures)
+        .filter(([, e]) => (e.weight !== null && Math.abs(e.weight) >= 0.05) || e.weight === null)
+        .map(([c, e]) => (e.weight === null ? `${c} (futuros ${e.side === "long" ? "comprados" : "vendidos"})` : c))
+        .sort();
+      return sig.length ? `carteira: ${sig.join(", ")}` : "carteira sem exposição relevante a commodities";
     },
     latestNoteDate(ref) {
       const n = notes.find((x) => x.relatedCommodities.includes(ref) || x.relatedCompanies.includes(ref) || x.id.endsWith(ref));

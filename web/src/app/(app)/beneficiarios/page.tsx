@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Card, CardBody, CardHeader, Disclaimer, PageHeader } from "@/components/ui";
 import { Change, DataBadge, ForecastArrow } from "@/components/market/bits";
 import { FundList, StockList } from "@/components/BeneficiariesPanel";
-import { beneficiaryCounts, fundsFor, stocksFor } from "@/lib/beneficiaries";
+import { beneficiaryCounts, fundsFor, nameOnlyFunds, stocksFor } from "@/lib/beneficiaries";
 import { getCatalog, getSummaryItem } from "@/lib/market";
 import { fmtDate, fmtPrice } from "@/lib/format";
 
@@ -16,6 +16,7 @@ export default async function BeneficiariesPage({ searchParams }: { searchParams
   const item = selected ? getSummaryItem(selected.id) : null;
   const stocks = selected ? stocksFor(selected.id) : [];
   const funds = selected ? fundsFor(selected.id) : [];
+  const nameOnly = selected ? nameOnlyFunds(selected.id) : [];
   const color = (id: string) => cat.categories.find((x) => x.id === id)?.color ?? "#64748b";
   return (
     <div className="space-y-5">
@@ -57,8 +58,8 @@ export default async function BeneficiariesPage({ searchParams }: { searchParams
             <CardBody><StockList stocks={stocks} /></CardBody>
           </Card>
           <Card>
-            <CardHeader title={`Fundos (${funds.filter((f) => f.basis !== "nao_verificada").length})`} subtitle="Fundos que acompanham esta commodity ou investem em empresas do setor (cadastro da CVM)" accent="var(--gold)" />
-            <CardBody><FundList funds={funds} /></CardBody>
+            <CardHeader title={`Fundos (${funds.filter((f) => f.exposure.basis !== "nao_verificada").length})`} subtitle="Fundos que têm esta commodity na carteira declarada à CVM, ou que a acompanham pelo nome" accent="var(--gold)" />
+            <CardBody><FundList funds={funds} nameOnly={nameOnly} /></CardBody>
           </Card>
         </>
       )}

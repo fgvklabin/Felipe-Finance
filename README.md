@@ -74,7 +74,7 @@ cd worker && python -m pytest -q
 
 | Área | Status | Fonte |
 |---|---|---|
-| 29 commodities (grãos, softs, metais, preciosos, energia, fertilizantes, madeira) | **Real**, mensal; dados até dez/2025 (edição disponível) | World Bank Pink Sheet (CC BY 4.0) |
+| 29 commodities (grãos, softs, metais, preciosos, energia, fertilizantes, madeira) | **Real**, mensal; edição atual descoberta automaticamente (dados até out/2026) | World Bank Pink Sheet (CC BY 4.0) |
 | USD/BRL, EUR/BRL | **Real**, diário | BCB PTAX |
 | CNY/BRL, AUD/USD, USD/CAD, USD/NOK, réplica do índice do dólar | **Real (derivado)**, diário | Taxas de referência do BCE |
 | Selic, IPCA, IBC-Br, Focus | **Real** | BCB SGS e Olinda |

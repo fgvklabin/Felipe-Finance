@@ -1,6 +1,7 @@
 import { Card, CardHeader, Disclaimer, PageHeader } from "@/components/ui";
 import { Simulator, type SimAsset } from "@/components/invest/Simulator";
 import { getCatalog, getCompanies, getFunds, getSeries, getSummaryItem } from "@/lib/market";
+import { simExposure } from "@/lib/fund-exposure";
 
 export const metadata = { title: "Simulador de Cenários" };
 
@@ -27,14 +28,16 @@ export default function SimulatorPage() {
     history[i.id] = monthly(i.id);
     vol[i.id] = getSummaryItem(i.id)?.stats?.volatility ?? 0;
   }
-  const funds = getFunds().funds.slice(0, 200).map((f) => ({ ref: f.cnpjDigits, label: f.name.slice(0, 70), exposure: f.exposureType }));
+  const funds = getFunds().funds
+    .map((f) => ({ ref: f.cnpjDigits, label: f.name.slice(0, 70), fund: simExposure(f.holdings) }))
+    .sort((a, b) => Number(!!b.fund) - Number(!!a.fund) || a.label.localeCompare(b.label, "pt-BR"));
   return (
     <div className="space-y-5">
       <PageHeader
         eyebrow="Ferramentas"
         accent="var(--blue)"
         title="Simulador de impacto em carteiras e fundos"
-        subtitle="Simule choques em commodities, câmbio e juros sobre uma carteira educacional ou um fundo existente. Números só aparecem para exposições diretas e verificáveis; o restante recebe análise qualitativa."
+        subtitle="Simule choques em commodities, câmbio e juros sobre uma carteira educacional ou um fundo existente. Números só aparecem para exposições diretas e verificáveis (inclusive fundos com carteira divulgada à CVM); o restante recebe análise qualitativa."
       />
       <Card>
         <CardHeader title="Simulação" accent="var(--blue)" />

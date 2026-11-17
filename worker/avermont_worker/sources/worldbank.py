@@ -11,7 +11,7 @@ import re
 import openpyxl
 
 from ..config import WORLDBANK_PINK_SHEET_URL
-from ..net import download
+from ..net import download, get_text
 
 log = logging.getLogger("avermont.worldbank")
 
@@ -30,9 +30,27 @@ def _period_to_date(p: str) -> str | None:
     return f"{m.group(1)}-{m.group(2)}-01"
 
 
+LANDING_PAGE = "https://www.worldbank.org/en/research/commodity-markets"
+_LINK = re.compile(r"https://thedocs\.worldbank\.org/en/doc/[0-9a-f]+-\d+/related/CMO-Historical-Data-Monthly\.xlsx")
+
+
+def discover_url() -> tuple[str, str]:
+    """Descobre o link da edição mais recente na página oficial; recorre à URL configurada se falhar."""
+    try:
+        html = get_text(LANDING_PAGE, timeout=60)
+        m = _LINK.search(html)
+        if m:
+            return m.group(0), "descoberta automática na página oficial do Banco Mundial"
+        log.warning("link do Pink Sheet não encontrado na página oficial; usando URL configurada")
+    except Exception as exc:  # noqa: BLE001
+        log.warning("página do Banco Mundial indisponível (%s); usando URL configurada", exc)
+    return WORLDBANK_PINK_SHEET_URL, "URL configurada (WORLDBANK_PINK_SHEET_URL)"
+
+
 def fetch(series_names: list[str]) -> dict:
     """Retorna {nome_series: {"unit": str, "points": [(date, value)]}, "_meta": {...}}."""
-    path = download(WORLDBANK_PINK_SHEET_URL, max_age_hours=24)
+    url, how = discover_url()
+    path = download(url, max_age_hours=24)
     wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
     ws = wb["Monthly Prices"]
     rows = list(ws.iter_rows(values_only=True))
@@ -41,7 +59,7 @@ def fetch(series_names: list[str]) -> dict:
     names = rows[header_idx]
     units = rows[header_idx + 1]
     col_by_name = {_norm(n): i for i, n in enumerate(names) if n}
-    out: dict = {"_meta": {"url": WORLDBANK_PINK_SHEET_URL, "sheetNote": updated_note}}
+    out: dict = {"_meta": {"url": url, "discovery": how, "sheetNote": updated_note}}
     for sname in series_names:
         idx = col_by_name.get(_norm(sname))
         if idx is None:

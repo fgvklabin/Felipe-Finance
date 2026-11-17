@@ -1,7 +1,7 @@
 import { AlertTriangle, CheckCircle2, Info } from "lucide-react";
 import { ForecastChart, type ForecastPoint } from "../charts/ForecastChart";
 import { Badge, Card, CardBody, CardHeader, Notice } from "../ui";
-import { fmtDate, fmtDateTime, fmtNumber, fmtPct, fmtPrice } from "@/lib/format";
+import { fmtDate, fmtDateTime, fmtMonth, fmtNumber, fmtPct, fmtPrice, fmtTarget } from "@/lib/format";
 import type { CatalogInstrument, ForecastResult, HorizonForecast } from "@/lib/market";
 import { forecastSentence } from "@/lib/plain";
 
@@ -35,7 +35,7 @@ export function ForecastPanel({ fc, history, inst, unitLabel }: { fc: ForecastRe
     <Card id="previsao">
       <CardHeader
         title="Previsão"
-        subtitle={`Calculada em ${fmtDateTime(fc.generatedAt)} a partir do preço de ${fmtDate(fc.origin.date)} (${fmtPrice(fc.origin.value)} ${unitLabel})`}
+        subtitle={`Calculada em ${fmtDateTime(fc.generatedAt)} a partir do preço de ${fc.frequency === "monthly" ? `${fmtMonth(fc.origin.date)} (média mensal)` : fmtDate(fc.origin.date)} (${fmtPrice(fc.origin.value)} ${unitLabel})`}
         accent="var(--blue)"
         right={<Badge tone="blue">Estatística · sem LLM</Badge>}
       />
@@ -59,7 +59,7 @@ export function ForecastPanel({ fc, history, inst, unitLabel }: { fc: ForecastRe
             <tbody>
               {entries.map(([lb, h]) => (
                 <tr key={lb} className={h.status === "expired" ? "opacity-60" : ""}>
-                  <td className="font-medium">{HLABEL[lb]}{h.targetDate && <div className="text-[10px] text-muted">alvo {fmtDate(h.targetDate)}</div>}</td>
+                  <td className="font-medium">{HLABEL[lb]}{h.targetDate && <div className="text-[10px] text-muted">alvo: {fmtTarget(h.targetDate, fc.frequency)}</div>}</td>
                   <td><Badge tone={STATUS[h.status].tone}>{STATUS[h.status].label}</Badge></td>
                   {h.central !== undefined ? (
                     <>

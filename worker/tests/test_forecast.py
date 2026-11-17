@@ -86,3 +86,14 @@ def test_models_do_not_peek_into_the_future():
     for model in a:
         for h in a[model]:
             assert a[model][h] == pytest.approx(b[model][h])
+
+
+def test_monthly_target_month_still_running_is_not_expired():
+    rng = np.random.default_rng(9)
+    vals = 100 * np.exp(np.cumsum(rng.normal(0, 0.03, 200)))
+    dates = monthly_dates(200)
+    last = date.fromisoformat(dates[-1])
+    # 17 dias após o início do mês seguinte: a média desse mês ainda está em formação
+    today = date(last.year + (last.month // 12), last.month % 12 + 1, 17)
+    res = forecast_series(make(vals), today=today)
+    assert res["horizons"]["30d"]["status"] in ("ok", "not_justified")

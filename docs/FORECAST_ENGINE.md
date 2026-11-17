@@ -40,7 +40,7 @@ XGBoost e LightGBM entram na fase 3, junto com variáveis exógenas (câmbio, cl
 | 30 / 90 / 180 dias | 1 / 3 / 6 meses | 21 / 63 / 126 pregões |
 | 12 meses | só com ≥ 15 anos de histórico e cobertura do intervalo entre 65% e 95% | idem |
 
-Horizontes cujo alvo já passou (fonte sem edição nova) ficam com status **expirado**: aparecem no arquivo de auditoria, mas não devem ser usados.
+Séries mensais preveem a **média do mês-alvo** (o Pink Sheet publica médias mensais). Por isso a previsão só expira **depois que o mês-alvo termina** — enquanto a média ainda está em formação, ela segue válida. Séries diárias expiram na data-alvo. Previsões expiradas aparecem no arquivo de auditoria, mas não devem ser usadas.
 
 ## Auditoria
 
@@ -48,7 +48,7 @@ Cada execução gera `web/data/market/forecast_archive/<data>_<hash>.json` com S
 
 ## Resultados desta implantação (17/11/2026)
 
-- 36 séries modeladas (29 commodities mensais + 7 câmbios diários).
-- Câmbio: horizontes de 7 a 180 dias publicados; nenhum modelo superou o passeio aleatório com significância (estimativa central = último valor).
-- Commodities: horizontes de 30 a 180 dias **expirados**, porque o Banco Mundial disponível vai até dez/2025. Os de 12 meses são publicados quando cumprem as regras.
-- Ganho significativo apenas em ouro (30/90/180 dias), KCl e café robusta, todos em horizontes já expirados.
+- 36 séries modeladas (29 commodities mensais com dados até out/2026 + 7 câmbios diários).
+- 119 horizontes publicados; 28 sem justificativa estatística; 4 expirados (sorgo, descontinuado pela fonte em 2020).
+- Ganho significativo sobre o passeio aleatório (Diebold–Mariano, p < 0,05): trigo 30d (Ridge), DAP 30d (drift), Brent 30d (ensemble), KCl 180d (Ridge) e ouro 12m (naive sazonal).
+- Câmbio: nenhum modelo superou o passeio aleatório com significância (estimativa central = último valor).

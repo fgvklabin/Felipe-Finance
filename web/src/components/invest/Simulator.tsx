@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Info, Plus, Trash2 } from "lucide-react";
 import { historicalFrequency, simulate, type SimPosition } from "@/lib/simulator";
+import type { FundSimExposure } from "@/lib/fund-exposure";
 import { fmtPct } from "@/lib/format";
 import { Badge, btnClass, cn, inputClass, labelClass } from "../ui";
 
@@ -18,7 +19,7 @@ const PRESETS = [
   { label: "Demanda de cobre ↑", q: "cobre" },
 ] as const;
 
-export function Simulator({ assets, history, vol, funds }: { assets: SimAsset[]; history: Record<string, number[]>; vol: Record<string, number>; funds: { ref: string; label: string; exposure: string }[] }) {
+export function Simulator({ assets, history, vol, funds }: { assets: SimAsset[]; history: Record<string, number[]>; vol: Record<string, number>; funds: { ref: string; label: string; fund: FundSimExposure | null }[] }) {
   const [positions, setPositions] = useState<SimPosition[]>([
     { kind: "commodity", ref: "ouro", label: "Ouro", weight: 20 },
     { kind: "usd", ref: "usd", label: "Dólar (caixa em US$)", weight: 20 },
@@ -68,9 +69,9 @@ export function Simulator({ assets, history, vol, funds }: { assets: SimAsset[];
           <div className="mt-2 flex gap-1">
             <select className={cn(inputClass, "h-8 text-xs")} value={fundSel} onChange={(e) => setFundSel(e.target.value)}>
               <option value="">+ fundo existente (CVM)…</option>
-              {funds.map((f) => <option key={f.ref} value={f.ref}>{f.label}</option>)}
+              {funds.map((f) => <option key={f.ref} value={f.ref}>{f.fund ? "✓ " : ""}{f.label}</option>)}
             </select>
-            <button className={btnClass("outline", "sm")} onClick={() => { const f = funds.find((x) => x.ref === fundSel); if (f) setPositions((p) => [...p, { kind: "fund", ref: f.ref, label: f.label, weight: 10 }]); setFundSel(""); }}><Plus size={13} /></button>
+            <button className={btnClass("outline", "sm")} onClick={() => { const f = funds.find((x) => x.ref === fundSel); if (f) setPositions((p) => [...p, { kind: "fund", ref: f.ref, label: f.label, weight: 10, fund: f.fund }]); setFundSel(""); }}><Plus size={13} /></button>
           </div>
         </div>
         <div>
@@ -102,7 +103,7 @@ export function Simulator({ assets, history, vol, funds }: { assets: SimAsset[];
         <div className="grid gap-3 md:grid-cols-3">
           <div className="rounded-lg border border-line p-3"><div className="text-[11px] uppercase tracking-wide text-muted">Efeito direto estimado</div><div className={cn("num text-2xl font-semibold", res.directTotal >= 0 ? "text-up" : "text-down")}>{fmtPct(res.directTotal, 2)}</div><div className="text-xs text-muted">sobre {fmtPct(res.quantifiedWeight, 0, false)} da carteira com exposição verificável</div></div>
           <div className="rounded-lg border border-line p-3"><div className="text-[11px] uppercase tracking-wide text-muted">Incerteza residual (±1σ, {horizon}m)</div><div className="num text-2xl font-semibold">±{fmtPct(res.sigma, 1, false)}</div><div className="text-xs text-muted">volatilidade histórica dos ativos diretos; ignora correlações</div></div>
-          <div className="rounded-lg border border-line p-3"><div className="text-[11px] uppercase tracking-wide text-muted">Sem estimativa numérica</div><div className="num text-2xl font-semibold">{fmtPct(1 - res.quantifiedWeight, 0, false)}</div><div className="text-xs text-muted">ações e fundos com exposição não verificada</div></div>
+          <div className="rounded-lg border border-line p-3"><div className="text-[11px] uppercase tracking-wide text-muted">Sem estimativa numérica</div><div className="num text-2xl font-semibold">{fmtPct(1 - res.quantifiedWeight, 0, false)}</div><div className="text-xs text-muted">ações, fundos sem carteira verificada e partes não estimáveis</div></div>
         </div>
         {demoShocked.length > 0 && <div className="rounded-lg border border-violet-500/30 bg-violet-500/5 p-2 text-xs">Choques em séries demonstrativas ({demoShocked.join(", ")}) só geram efeitos qualitativos: não há histórico real para medir frequência.</div>}
         <div className="overflow-x-auto">

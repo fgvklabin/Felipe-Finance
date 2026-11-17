@@ -11,6 +11,7 @@ import { AskAi } from "@/components/ai/AskAi";
 import { correlationBetween, getCatalog, getCategory, getForecasts, getInstrument, getSeries, getSummary, getSummaryItem } from "@/lib/market";
 import { linksForDriver } from "@/lib/impact";
 import { fundsFor, stocksFor } from "@/lib/beneficiaries";
+import { BASIS_LABEL } from "@/lib/fund-exposure";
 import { getCurrentUser } from "@/lib/auth";
 import { isWatched } from "@/lib/watchlist";
 import { forecastSentence, storyFor } from "@/lib/plain";
@@ -46,7 +47,7 @@ export default async function CommodityPage({ params }: { params: Promise<{ id: 
   const lastBrl = series?.brlPoints?.[series.brlPoints.length - 1];
   const impact = linksForDriver(id);
   const stocks = stocksFor(id);
-  const funds = fundsFor(id).filter((f) => f.basis !== "nao_verificada");
+  const funds = fundsFor(id).filter((f) => f.exposure.basis !== "nao_verificada");
   const catalog = getCatalog();
   const compareOptions = [
     ...catalog.instruments.map((i) => ({ id: i.id, label: i.name.pt, demo: i.dataMode === "demo" })),
@@ -104,7 +105,7 @@ export default async function CommodityPage({ params }: { params: Promise<{ id: 
               ))}
               {funds.slice(0, 6).map((f) => (
                 <Link key={f.fund.cnpjDigits} href={`/fundos/${f.fund.cnpjDigits}`} className="max-w-[320px] truncate rounded-lg border border-line px-3 py-2 text-sm hover:border-gold" title={f.fund.name}>
-                  <Badge tone={f.basis === "direta" ? "green" : "blue"}>{f.basis === "direta" ? "fundo de índice" : "fundo de ações"}</Badge> <span className="text-fg-2">{f.fund.name}</span>
+                  <Badge tone={BASIS_LABEL[f.exposure.basis].tone}>{f.exposure.weight !== null ? `${Math.round(f.exposure.weight * 100)}% da carteira` : BASIS_LABEL[f.exposure.basis].label}</Badge> <span className="text-fg-2">{f.fund.name}</span>
                 </Link>
               ))}
             </div>

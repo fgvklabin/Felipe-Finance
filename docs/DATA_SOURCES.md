@@ -6,15 +6,16 @@ O registro completo, com licença, cobertura, limitações e status de ingestão
 
 | Conector | Endpoint | Licença | Frequência | Observações |
 |---|---|---|---|---|
-| `worldbank_pinksheet` | XLSX "CMO-Historical-Data-Monthly" (thedocs.worldbank.org) | CC BY 4.0 | Mensal | **A URL muda a cada edição**: atualize `WORLDBANK_PINK_SHEET_URL`. A edição usada vai até dez/2025 porque `www.worldbank.org` (onde está o link da edição atual) não estava liberado na rede. |
+| `worldbank_pinksheet` | XLSX "CMO-Historical-Data-Monthly" (thedocs.worldbank.org) | CC BY 4.0 | Mensal | A URL muda a cada edição: o worker a **descobre automaticamente** na página oficial (`www.worldbank.org/en/research/commodity-markets`) e usa `WORLDBANK_PINK_SHEET_URL` como reserva. Edição atual: dados até out/2026. |
 | `bcb_ptax` | `olinda.bcb.gov.br/.../PTAX` | Dados públicos (citar BCB) | Diária | USD (30 anos) e EUR (10 anos) |
 | `bcb_sgs_*` | `api.bcb.gov.br/dados/serie/bcdata.sgs.{código}` | Dados públicos | Diária/mensal | 432 Selic, 433 IPCA, 13522 IPCA 12m, 24364 IBC-Br |
 | `bcb_focus` | `olinda.bcb.gov.br/.../Expectativas` | Dados públicos | Semanal | A API exige espaços como `%20` |
 | `ecb_exr` | `data-api.ecb.europa.eu/service/data/EXR` | Reutilização com citação | Diária | Taxas cruzadas e réplica do índice do dólar (não é o DXY® da ICE) |
 | `cvm_companies` | `dados.cvm.gov.br` (cad, FCA, DFP) | Dados abertos | Anual | Tickers conferidos no FCA. **CSNA3 não consta no FCA** (o registro traz "4030") e por isso fica sinalizado |
 | `cvm_funds` | `dados.cvm.gov.br` (registro_fundo_classe, inf_diario, lâmina) | Dados abertos | Diária/mensal | 13 meses de informes diários (~11 MB por mês). Linhas malformadas da lâmina são descartadas |
+| `cvm_cda` | `dados.cvm.gov.br/dados/FI/DOC/CDA` (cda_fi_AAAAMM.zip) | Dados abertos | Mensal | Carteira de cada fundo: peso = valor de mercado ÷ PL; look-through de um nível em cotas de fundos; futuros só com direção; parcela confidencial informada. Usa o mês mais recente em que a parcela confidencial é ≤ 50% |
 
-**Hosts liberados no ambiente desta sessão:** `api.bcb.gov.br`, `olinda.bcb.gov.br`, `thedocs.worldbank.org`, `dados.cvm.gov.br`, `api.frankfurter.app`, `data-api.ecb.europa.eu`.
+**Hosts liberados no ambiente desta sessão:** `www.worldbank.org`, `api.bcb.gov.br`, `olinda.bcb.gov.br`, `thedocs.worldbank.org`, `dados.cvm.gov.br`, `api.frankfurter.app`, `data-api.ecb.europa.eu`.
 
 ## Exigem licença (exibidas como demonstração ou indisponíveis)
 

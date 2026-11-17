@@ -4,6 +4,7 @@ import { IMPACT_LINKS } from "../impact";
 import { COMPANY_KB } from "../companies-kb";
 import { SOURCES } from "../sources-registry";
 import { stocksFor, fundsFor } from "../beneficiaries";
+import { BASIS_LABEL, exposureText, monthLabel } from "../fund-exposure";
 import { fmtCompact, fmtDate, fmtNumber, fmtPct, fmtPrice } from "../format";
 import { query } from "../db";
 import { rankQuotes } from "../procurement";
@@ -47,12 +48,12 @@ export function publicDocs(): Doc[] {
         ? `${inst.name.pt}: SÉRIE DEMONSTRATIVA (sem preço real licenciado). Referência real: ${inst.brazilRef}. Fundamentos: produtores ${inst.fundamentals.producers.join(", ")}; vetores ${inst.fundamentals.drivers.join("; ")}.`
         : `${inst.name.pt} (${inst.benchmark}). Último preço ${fmtPrice(s?.last)} ${it?.unitLabel} em ${fmtDate(s?.lastDate)}${s?.stale ? " (DADO DESATUALIZADO: fonte não publicou edição mais recente)" : ""}. Variações: mês ${fmtPct(s?.changes.m1)}, 3 meses ${fmtPct(s?.changes.m3)}, 12 meses ${fmtPct(s?.changes.y1)}, no ano ${fmtPct(s?.changes.ytd)}. Volatilidade anualizada ${fmtPct(s?.volatility ?? null, 1, false)}. Previsões Avermont: ${horizons}. Vetores de preço (qualitativos): ${inst.fundamentals.drivers.join("; ")}. Sazonalidade: ${inst.fundamentals.seasonality} Clima: ${inst.fundamentals.weather} Geopolítica: ${inst.fundamentals.geopolitics}${corr ? ` Correlação mensal com USD/BRL (10 anos): ${fmtNumber(corr.r, 2)} (faixa em janelas de 36m: ${fmtNumber(corr.rollingMin, 2)} a ${fmtNumber(corr.rollingMax, 2)}).` : ""}`,
     });
-    const st = stocksFor(inst.id), fu = fundsFor(inst.id).filter((f) => f.basis !== "nao_verificada");
+    const st = stocksFor(inst.id), fu = fundsFor(inst.id).filter((f) => f.exposure.basis !== "nao_verificada");
     if (st.length || fu.length) {
       docs.push({
         id: `benef:${inst.id}`, title: `Quem pode se beneficiar da alta de ${inst.name.pt}`, scope: "public", keys: [inst.id, "beneficiar", "acoes", "fundos", ...tokens(inst.name.pt)],
         url: `/beneficiarios?c=${inst.id}`, asOf: null, source: "CVM (cadastro e DFP) + análise qualitativa Avermont",
-        body: `Ações com receita ligada a ${inst.name.pt}: ${st.map((x) => `${x.tickers.join("/")} (${x.name}; ${x.strength === "direta" ? "efeito positivo" : "efeito misto"}: ${x.channels[0]})`).join("; ") || "nenhuma"}. Fundos com o tema: ${fu.slice(0, 8).map((x) => `${x.fund.name} (CNPJ ${x.fund.cnpj}, ${x.basis === "direta" ? "fundo de índice, exposição direta" : "fundo de ações, exposição indireta"})`).join("; ") || "nenhum"}. A alta da commodity não garante alta das ações/fundos.`,
+        body: `Ações com receita ligada a ${inst.name.pt}: ${st.map((x) => `${x.tickers.join("/")} (${x.name}; ${x.strength === "direta" ? "efeito positivo" : "efeito misto"}: ${x.channels[0]})`).join("; ") || "nenhuma"}. Fundos com o tema: ${fu.slice(0, 8).map((x) => `${x.fund.name} (CNPJ ${x.fund.cnpj}, ${BASIS_LABEL[x.exposure.basis].label}: ${exposureText(x.exposure)})`).join("; ") || "nenhum"}. A alta da commodity não garante alta das ações/fundos.`,
       });
     }
   }
@@ -99,7 +100,15 @@ export function publicDocs(): Doc[] {
     if (!list.length) continue;
     docs.push({
       id: `funds:${t}`, title: `Fundos com tema "${t}" (cadastro CVM)`, scope: "public", keys: ["fundos", "fundo", t, t === "dolar" ? "cambial" : ""], url: "/beneficiarios", asOf: getFunds().ingestedAt?.slice(0, 10) ?? null, source: "CVM — cadastro de fundos e informe diário",
-      body: `Fundos cujo nome/classe indicam o tema ${t} (exposição inferida, carteira não verificada): ` + list.map((f) => `${f.name} (CNPJ ${f.cnpj}; ${f.vehicle}; PL ${fmtCompact(f.netAssets)}; 12m ${fmtPct(f.performance?.return12m ?? null)})`).join("; ") + ". Fiagros investem em crédito/imóveis do agro e não têm exposição direta a preços agrícolas.",
+      body: `Fundos cujo nome/classe indicam o tema ${t}: ` + list.map((f) => `${f.name} (CNPJ ${f.cnpj}; ${f.vehicle}; PL ${fmtCompact(f.netAssets)}; 12m ${fmtPct(f.performance?.return12m ?? null)}; ${f.holdings ? `carteira CDA ${monthLabel(f.holdings.month)} verificada` : "carteira não verificada"})`).join("; ") + ". O nome não garante a exposição: veja a carteira verificada de cada fundo. Fiagros investem em crédito/imóveis do agro e não têm exposição direta a preços agrícolas.",
+    });
+  }
+  for (const f of funds.filter((x) => x.holdings)) {
+    const h = f.holdings!;
+    const ex = Object.entries(h.exposures).map(([c, e]) => e.weight !== null ? `${c} ${fmtPct(e.weight, 1, false)} (${e.via.join(", ")})` : `${c}: futuros ${e.side === "long" ? "comprados" : "vendidos"} (tamanho não divulgado)`).join("; ");
+    docs.push({
+      id: `fund:${f.cnpjDigits}`, title: `Carteira do fundo ${f.name}`, scope: "public", keys: ["fundo", "carteira", f.cnpjDigits, ...tokens(f.name)], url: `/fundos/${f.cnpjDigits}`, asOf: h.month, source: "CVM — Composição e Diversificação das Aplicações (CDA)",
+      body: `${f.name} (CNPJ ${f.cnpj}, ${f.vehicle}). Carteira declarada à CVM em ${monthLabel(h.month)}: patrimônio ${fmtCompact(h.pl)}; parcela confidencial ${fmtPct(h.confidentialShare, 1, false)}. Exposição a commodities/câmbio: ${ex || "nenhuma relevante"}. Maiores posições: ${h.top.slice(0, 5).map((p) => `${p.label} ${fmtPct(p.weight, 1, false)}`).join("; ")}. A carteira muda mês a mês; não é recomendação.`,
     });
   }
   docs.push({

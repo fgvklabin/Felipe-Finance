@@ -252,11 +252,21 @@ def lamina(cnpjs: set[str]) -> dict[str, dict]:
 
 
 def fetch() -> dict:
+    from . import cvm_cda
+
     funds = discover()
     cnpjs = {f["cnpjDigits"] for f in funds}
     perf = performance(daily_quotas(cnpjs))
     lam = lamina(cnpjs)
+    try:
+        hold = cvm_cda.holdings(cnpjs)
+    except Exception as exc:  # noqa: BLE001 — sem CDA, mantém a exposição inferida
+        log.error("CDA indisponível: %s", exc)
+        hold = {}
     for f in funds:
         f["performance"] = perf.get(f["cnpjDigits"])
         f["documents"] = lam.get(f["cnpjDigits"])
+        f["holdings"] = hold.get(f["cnpjDigits"])
+        if f["holdings"]:
+            f["exposureBasis"] = f"verificada na carteira divulgada à CVM (CDA de {f['holdings']['month']})"
     return {"funds": funds}

@@ -11,7 +11,7 @@ import { toRows } from "@/lib/rows";
 import { getPrefs } from "@/lib/prefs";
 import { dailySummary, latestMacro, marketNotes } from "@/lib/insights";
 import { upcomingEvents } from "@/lib/calendar";
-import { fmtDate, fmtDateTime, fmtNumber, fmtPct, fmtPrice } from "@/lib/format";
+import { fmtDate, fmtDateTime, fmtNumber, fmtPct, fmtPrice, fmtTarget } from "@/lib/format";
 
 export const metadata = { title: "Visão Geral" };
 
@@ -165,7 +165,7 @@ export default async function OverviewPage() {
               <div key={id} className="rounded-lg border border-line p-3">
                 <div className="flex items-center justify-between text-sm">
                   <Link href={`/moedas/${id}`} className="font-medium hover:text-blue">{fxRows.find((r) => r.id === id)?.name}</Link>
-                  <span className="text-[11px] text-muted">alvo {fmtDate(f!.targetDate)}</span>
+                  <span className="text-[11px] text-muted">alvo {fmtTarget(f!.targetDate, "daily")}</span>
                 </div>
                 <div className="num mt-1 text-lg font-semibold">{fmtPrice(f!.central)}</div>
                 <div className="num text-xs text-muted">provavelmente entre {fmtPrice(f!.low)} e {fmtPrice(f!.high)}</div>
